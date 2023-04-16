@@ -12,6 +12,10 @@ const Home = () => {
   const { user } = useAppContext();
 
   useEffect(() => {
+    document.title = 'Dashboard';
+  },[])
+
+  useEffect(() => {    
     const { firstName, lastName } = user;
     const fullName = `${firstName} ${lastName}`;
     setFullName(fullName);

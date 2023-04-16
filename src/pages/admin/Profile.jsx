@@ -1,18 +1,77 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import {
   RiEdit2Line,
-  RiShieldCheckLine,
-  RiErrorWarningLine,
+  // RiShieldCheckLine,
+  // RiErrorWarningLine,
 } from "react-icons/ri";
-import { Link } from "react-router-dom";
-import { Switch } from "@headlessui/react";
+// import { Link } from "react-router-dom";
+// import { Switch } from "@headlessui/react";
+import Select from '../../components/Select';
+import UseDataUser from '../auth/hooks/useDataUser';
+import ProfileHandler from './handlers/Profile.handler';
+import SelectHandler from '../../components/handler/Select.handler';
 
 const Profile = () => {
-  const [enabled, setEnabled] = useState(false);
+  const {
+    userId,
+    email,
+    avatar,
+    firstName,
+    setFirstName,
+    lastName,
+    setLastName,
+    mobile,
+    setMobile,
+    numFijo,
+    setNumFijo,
+    postalCode, setPostalCode,
+    street, setStreet,
+    countryId, setCountry,
+    stateId, setState,
+    locationId, setLocation,
+    description, setDescription,
+    dataCountries, setDataCountries,
+    token, dataStates, setDataStates,
+    dataLocation, setDataLocation, setUser,
+    municipalityId, setMunicipality,
+    dataMunicipality, setDataMunicipality,
+    fullAddress, setFullAddress
+  } = UseDataUser();
+
+  const { handlerSubmiProfile } = ProfileHandler({ setUser, token });
+
+  const {
+    getCountries,
+    getStatesByCountry,
+    getMunicipalityByState,
+    getLocationByMunicipality
+  } = SelectHandler({ token });
+
+  useEffect(() => {
+    document.title = 'Editar perfil';
+    getCountries({ setDataCountries });
+  }, []);
+
+  const handlerSubmitDatosPersonales = () => {
+    const formData = { firstName, lastName, mobile, numFijo };
+    handlerSubmiProfile({ userId, formData });
+  }
+
+  const handlerSubmitDatosDireccion = () => {
+    const formData = {
+      addressId: {
+        postalCode,
+        description,
+        fullAddress: JSON.stringify({ street, countryId, stateId, municipalityId, locationId })
+      }
+    };
+    handlerSubmiProfile({ userId, formData });
+  }
+
   return (
     <>
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-        <h1 className="text-xl text-gray-100">Profile</h1>
+        <h1 className="text-xl text-gray-100">Datos personales</h1>
         <hr className="my-8 border-gray-500/30" />
         <form>
           <div className="flex items-center mb-8">
@@ -22,7 +81,7 @@ const Profile = () => {
             <div className="flex-1">
               <div className="relative mb-2">
                 <img
-                  src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
+                  src={avatar}
                   className="w-28 h-28 object-cover rounded-lg"
                 />
                 <label
@@ -34,133 +93,249 @@ const Profile = () => {
                 <input type="file" id="avatar" className="hidden" />
               </div>
               <p className="text-gray-500 text-sm">
-                Allowed file types: png, jpg, jpeg.
+                Se permiten imágenes de tipo: png, jpg, jpeg
               </p>
             </div>
           </div>
           <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
             <div className="w-full md:w-1/4">
               <p>
-                Nombre completo <span className="text-red-500">*</span>
+                Nombre <span className="text-red-500">*</span>
               </p>
             </div>
             <div className="flex-1 flex items-center gap-4">
               <div className="w-full">
                 <input
                   type="text"
+                  value={firstName}
+                  name="firstName"
+                  onChange={(evt) => {
+                    setFirstName(evt.target.value);
+                  }}
                   className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
                   placeholder="Nombre(s)"
                 />
               </div>
+              <div className="w-full md:w-1/4">
+                <p>
+                  Apellidos <span className="text-red-500">*</span>
+                </p>
+              </div>
               <div className="w-full">
                 <input
                   type="text"
+                  value={lastName}
+                  onChange={(evt) => {
+                    setLastName(evt.target.value);
+                  }}
+                  name="lastName"
                   className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
                   placeholder="Apellido(s)"
                 />
               </div>
             </div>
           </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+
+          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
             <div className="w-full md:w-1/4">
               <p>
-                Nombre de la empresa <span className="text-red-500">*</span>
+                Número de celular <span className="text-red-500">*</span>
               </p>
             </div>
-            <div className="flex-1">
-              <input
-                type="text"
-                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Nombre(s)"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-            <div className="w-full md:w-1/4">
-              <p>
-                Número de contacto <span className="text-red-500">*</span>
-              </p>
-            </div>
-            <div className="flex-1">
-              <input
-                type="text"
-                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Nombre(s)"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-            <div className="w-full md:w-1/4">
-              <p>
-                Página web <span className="text-red-500">*</span>
-              </p>
-            </div>
-            <div className="flex-1">
-              <input
-                type="text"
-                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Nombre(s)"
-              />
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-            <div className="w-full md:w-1/4">
-              <p>
-                País <span className="text-red-500">*</span>
-              </p>
-            </div>
-            <div className="flex-1">
-              <select className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none">
-                <option value="Argentina">Argentina</option>
-                <option value="Colombia">Colombia</option>
-                <option value="México">México</option>
-                <option value="Perú">Perú</option>
-                <option value="Uruguay">Uruguay</option>
-                <option value="Venezuela">Venezuela</option>
-              </select>
-            </div>
-          </div>
-          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-            <div className="w-full md:w-1/4">
-              <p>
-                Ciudad <span className="text-red-500">*</span>
-              </p>
-            </div>
-            <div className="flex-1">
-              <select className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none">
-                <option value="Barquisiméto">Barquisiméto</option>
-                <option value="Bogotá">Bogotá</option>
-                <option value="Buga">Buga</option>
-                <option value="Chihuahua">Chihuahua</option>
-                <option value="Ciudad de México">Ciudad de México</option>
-                <option value="Lima">Lima</option>
-                <option value="Montevideo">Montevideo</option>
-                <option value="Caracas">Caracas</option>
-                <option value="Venezuela">Venezuela</option>
-              </select>
+            <div className="flex-1 flex items-center gap-4">
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="mobile"
+                  value={mobile}
+                  onChange={(evt) => {
+                    setMobile(evt.target.value);
+                  }}
+                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                  placeholder="Número de celular"
+                />
+              </div>
+              <div className="w-full md:w-1/4">
+                <p>
+                  Fijo <span className="text-red-500">*</span>
+                </p>
+              </div>
+              <div className="w-full">
+                <input
+                  type="text"
+                  name="numFijo"
+                  value={numFijo}
+                  onChange={(evt) => {
+                    setNumFijo(evt.target.value);
+                  }}
+                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                  placeholder="Número de teléfono fijo"
+                />
+              </div>
             </div>
           </div>
         </form>
         <hr className="my-8 border-gray-500/30" />
         <div className="flex justify-end">
-          <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
+          <button
+            onClick={(evt) => {
+              evt.preventDefault();
+              handlerSubmitDatosPersonales();
+            }}
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
             Guardar
           </button>
         </div>
       </div>
-      {/* Change password */}
+      {/* Dirección  */}
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-        <h1 className="text-xl text-gray-100">Usuario y contraseña</h1>
+        <h1 className="text-xl text-gray-100">Dirección</h1>
         <hr className="my-8 border-gray-500/30" />
-        <form className="mb-8">
+        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+          <div className="w-full md:w-1/4">
+            <p>
+              Código postal
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
+            <div className="w-full">
+              <input
+                type="text"
+                name="postalCode"
+                value={postalCode}
+                onChange={(evt) => {
+                  setPostalCode(evt.target.value);
+                }}
+                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                placeholder="Código postal"
+              />
+            </div>
+            <div className="w-full md:w-1/4">
+              <p>
+                Calle <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="w-full">
+              <input
+                type="text"
+                name="street"
+                value={street}
+                onChange={(evt) => {
+                  setStreet(evt.target.value);
+                }}
+                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                placeholder="Calle"
+              />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+          <div className="w-full md:w-1/4">
+            <p>
+              País <span className="text-red-500">*</span>
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
+            <div className="w-full">
+              <Select
+                initialValue={countryId}
+                onChangeSelect={(value) => {
+                  setCountry(value);
+                  setState([]);
+                  getStatesByCountry({ setDataStates, countryId: value });
+                }}
+                data={dataCountries} />
+            </div>
+            <div className="w-full md:w-1/4">
+              <p>
+                Provincia <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="w-full">
+              <Select
+                value={stateId}
+                onChangeSelect={(value) => {
+                  setState(value);
+                  setMunicipality([]);
+                  getMunicipalityByState({ setDataMunicipality, stateId: value })
+                }} data={dataStates} />
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
+          <div className="w-full md:w-1/4">
+            <p>
+              Municipio
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
+            <div className="w-full">
+              <Select
+                value={municipalityId}
+                onChangeSelect={(value) => {
+                  setMunicipality(value);
+                  setLocation([]);
+                  getLocationByMunicipality({ setDataLocation, municipalityId: value });
+                }}
+                data={dataMunicipality} />
+            </div>
+            <div className="w-full md:w-1/4">
+              <p>
+                Localidad
+              </p>
+            </div>
+            <div className="w-full">
+              <Select
+                value={locationId}
+                onChangeSelect={(value) => {
+                  setLocation(value);
+                }} data={dataLocation} />
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+          <div className="w-full md:w-1/4">
+            <p>
+              Descripción
+            </p>
+          </div>
+          <div className="flex-1">
+            <textarea
+              value={description}
+              onChange={(evt) => {
+                setDescription(evt.target.value);
+              }}
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+              placeholder="Deje una descripción"
+            ></textarea>
+          </div>
+        </div>
+        <hr className="my-8 border-gray-500/30" />
+        <div className="flex justify-end">
+          <button
+            onClick={(evt) => {
+              evt.preventDefault();
+              handlerSubmitDatosDireccion();
+            }}
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
+            Guardar
+          </button>
+        </div>
+      </div>
+      {/* Correo y contraseña */}
+      <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+        <h1 className="text-xl text-gray-100">Correo y contraseña</h1>
+        <hr className="my-8 border-gray-500/30" />
+        <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center gap-y-4 justify-between">
             <div>
               <h5 className="text-gray-100 text-xl mb-1">Correo electrónico</h5>
-              <p className="text-gray-500 text-sm">jorgetrejo@gmail.com</p>
+              <p className="text-gray-500 text-sm">{email}</p>
             </div>
             <div>
               <button className="w-full md:w-auto bg-secondary-900/50 py-3 px-4 rounded-lg hover:bg-secondary-900 hover:text-gray-100 transition-colors">
-                Cambiar email
+                Cambiar correo
               </button>
             </div>
           </div>
@@ -176,8 +351,8 @@ const Profile = () => {
               </button>
             </div>
           </div>
-        </form>
-        <div className="grid grid-cols-1 md:grid-cols-8 items-center gap-y-4 bg-green-600/10 p-4 rounded-lg border border-dashed border-green-600">
+        </div>
+        {/* <div className="grid grid-cols-1 md:grid-cols-8 items-center gap-y-4 bg-green-600/10 p-4 rounded-lg border border-dashed border-green-600">
           <div className="flex justify-center">
             <RiShieldCheckLine className="text-5xl text-green-600" />
           </div>
@@ -194,10 +369,10 @@ const Profile = () => {
               Activar
             </button>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* Connected accounts */}
-      <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+      {/* <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <h1 className="text-xl text-gray-100">Conectar con cuentas</h1>
         <hr className="my-8 border-gray-500/30" />
         <div className="flex flex-col md:flex-row gap-4 items-center bg-green-600/10 p-4 rounded-lg border border-dashed border-green-600 mb-8">
@@ -316,9 +491,9 @@ const Profile = () => {
           </div>
           <hr className="my-8 border-gray-500/30 border-dashed" />
         </form>
-      </div>
+      </div> */}
       {/* Email preferences */}
-      <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+      {/* <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <h1 className="text-xl text-gray-100">
           Notificaciones por correo electrónico
         </h1>
@@ -367,9 +542,9 @@ const Profile = () => {
             Guardar
           </button>
         </div>
-      </div>
+      </div> */}
       {/* Inactive account */}
-      <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+      {/* <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <h1 className="text-xl text-gray-100">Desactivar cuenta</h1>
         <hr className="my-8 border-gray-500/30" />
         <div className="flex flex-col md:flex-row items-center gap-4 bg-yellow-600/10 p-4 rounded-lg border border-dashed border-yellow-600 mb-8">
@@ -399,7 +574,7 @@ const Profile = () => {
             Desactivate account
           </button>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
