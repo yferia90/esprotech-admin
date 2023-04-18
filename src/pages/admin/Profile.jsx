@@ -35,10 +35,10 @@ const Profile = () => {
     dataLocation, setDataLocation, setUser,
     municipalityId, setMunicipality,
     dataMunicipality, setDataMunicipality,
-    fullAddress, setFullAddress
+    addressId
   } = UseDataUser();
 
-  const { handlerSubmiProfile } = ProfileHandler({ setUser, token });
+  const { handlerSubmiProfile, handlerSubmiAddress } = ProfileHandler({ setUser, token });
 
   const {
     getCountries,
@@ -59,13 +59,11 @@ const Profile = () => {
 
   const handlerSubmitDatosDireccion = () => {
     const formData = {
-      addressId: {
         postalCode,
         description,
         fullAddress: JSON.stringify({ street, countryId, stateId, municipalityId, locationId })
-      }
     };
-    handlerSubmiProfile({ userId, formData });
+    handlerSubmiAddress({ addressId, formData, userId });
   }
 
   return (
@@ -97,8 +95,10 @@ const Profile = () => {
               </p>
             </div>
           </div>
+
+
           <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-            <div className="w-full md:w-1/4">
+            <div className="w-full md:w-1/4 px-2">
               <p>
                 Nombre <span className="text-red-500">*</span>
               </p>
@@ -116,11 +116,13 @@ const Profile = () => {
                   placeholder="Nombre(s)"
                 />
               </div>
-              <div className="w-full md:w-1/4">
-                <p>
-                  Apellidos <span className="text-red-500">*</span>
-                </p>
-              </div>
+            </div>
+            <div className="w-full md:w-1/4 px-2">
+              <p>
+                Apellidos <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <div className="flex-1 flex items-center gap-4">
               <div className="w-full">
                 <input
                   type="text"
@@ -137,7 +139,7 @@ const Profile = () => {
           </div>
 
           <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-            <div className="w-full md:w-1/4">
+            <div className="w-full md:w-1/4 px-2">
               <p>
                 Número de celular <span className="text-red-500">*</span>
               </p>
@@ -155,11 +157,13 @@ const Profile = () => {
                   placeholder="Número de celular"
                 />
               </div>
-              <div className="w-full md:w-1/4">
-                <p>
-                  Fijo <span className="text-red-500">*</span>
-                </p>
-              </div>
+            </div>
+            <div className="w-full md:w-1/4 px-2">
+              <p>
+                Teléfono Fijo
+              </p>
+            </div>
+            <div className="flex-1 flex items-center gap-4">
               <div className="w-full">
                 <input
                   type="text"
@@ -192,7 +196,7 @@ const Profile = () => {
         <h1 className="text-xl text-gray-100">Dirección</h1>
         <hr className="my-8 border-gray-500/30" />
         <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 px-2">
             <p>
               Código postal
             </p>
@@ -210,11 +214,13 @@ const Profile = () => {
                 placeholder="Código postal"
               />
             </div>
-            <div className="w-full md:w-1/4">
-              <p>
-                Calle <span className="text-red-500">*</span>
-              </p>
-            </div>
+          </div>
+          <div className="w-full md:w-1/4 px-2">
+            <p>
+              Calle <span className="text-red-500">*</span>
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
             <div className="w-full">
               <input
                 type="text"
@@ -229,8 +235,10 @@ const Profile = () => {
             </div>
           </div>
         </div>
+
+
         <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-          <div className="w-full md:w-1/4">
+          <div className="w-full md:w-1/4 px-2">
             <p>
               País <span className="text-red-500">*</span>
             </p>
@@ -246,11 +254,13 @@ const Profile = () => {
                 }}
                 data={dataCountries} />
             </div>
-            <div className="w-full md:w-1/4">
-              <p>
-                Provincia <span className="text-red-500">*</span>
-              </p>
-            </div>
+          </div>
+          <div className="w-full md:w-1/4 px-2">
+            <p>
+              Provincia <span className="text-red-500">*</span>
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
             <div className="w-full">
               <Select
                 value={stateId}
@@ -280,11 +290,13 @@ const Profile = () => {
                 }}
                 data={dataMunicipality} />
             </div>
-            <div className="w-full md:w-1/4">
-              <p>
-                Localidad
-              </p>
-            </div>
+          </div>
+          <div className="w-full md:w-1/4 px-2">
+            <p>
+              Localidad
+            </p>
+          </div>
+          <div className="flex-1 flex items-center gap-4">
             <div className="w-full">
               <Select
                 value={locationId}

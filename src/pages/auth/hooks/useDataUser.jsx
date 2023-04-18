@@ -21,6 +21,8 @@ const UseDataUser = () => {
     const [dataMunicipality, setDataMunicipality] = useState([]);
     const [dataLocation, setDataLocation] = useState([]);
     const [fullAddress, setFullAddress] = useState({});
+    const [addressId, setAddressId] = useState(null);
+    const [TbUserId, setTbUserId] = useState(null);
     const [avatar, setAvatar] = useState('https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg');
     const { user, token, setUser } = useAppContext();
 
@@ -30,6 +32,8 @@ const UseDataUser = () => {
         let fullAddress = address?.fullAddress || '';
         fullAddress = fullAddress.length > 0 ? JSON.parse(fullAddress) : {};
         const postalCode = address?.postalCode || '';
+        const tbUserId = address?.TbUserId || null;
+        const addreesId = address?.id || null;
         const description = address?.description || '';
         const street = fullAddress.street || '';
         const countryId = fullAddress.countryId || '';
@@ -51,6 +55,8 @@ const UseDataUser = () => {
         setState(stateId);
         setMunicipality(municipalityId);
         setLocation(locationId);
+        setTbUserId(tbUserId);
+        setAddressId(addreesId);
     }, [user]);
 
     return {
@@ -77,7 +83,9 @@ const UseDataUser = () => {
         dataLocation, setDataLocation, setUser,
         municipalityId, setMunicipality,
         dataMunicipality, setDataMunicipality,
-        fullAddress, setFullAddress
+        fullAddress, setFullAddress,
+        TbUserId, setTbUserId,
+        addressId, setAddressId,
     }
 }
 

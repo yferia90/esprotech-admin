@@ -6,6 +6,7 @@ const LoginHook = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [closeSession, setCloseSession] = useState(false);
+    const [showAlertError, setShowAlertError] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -22,7 +23,9 @@ const LoginHook = () => {
         setEmail,
         password,
         setPassword,
-        setCloseSession
+        setCloseSession,
+        showAlertError,
+        setShowAlertError
     }
 }
 
