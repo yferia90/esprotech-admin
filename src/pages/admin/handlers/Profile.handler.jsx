@@ -14,16 +14,20 @@ const handlerSubmiProfile = async ({ formData, userId, setUser, token }) => {
     }
 }
 
-const handlerSubmiAddress = async ({ addressId, formData, setUser, token, userId }) => {
+const handlerSubmiAddress = async ({ addressId, formData, token, userId, setAddress }) => {
     try {
         let result;
         if(addressId !== null){
             result = await updateAddreesUser({ formData, token, addressId });
         }else {
             result = await createAddreesUser({ formData, token, userId });
-        }        
+        }
+        const newAddress = [];
         const status = result?.data?.status;
+        const address = result?.data?.data?.address;
         if (status === 200) {
+            newAddress.push(address);
+            setAddress(newAddress);
             return true;
         } else return false;
     } catch (err) {
@@ -31,9 +35,9 @@ const handlerSubmiAddress = async ({ addressId, formData, setUser, token, userId
     }
 }
 
-const ProfileHandler = ({ setUser, token }) => ({
+const ProfileHandler = ({ setUser, setAddress, token }) => ({
     handlerSubmiProfile: ({ formData, userId }) => handlerSubmiProfile({ formData, userId, setUser, token }),
-    handlerSubmiAddress: ({ addressId, formData, userId }) => handlerSubmiAddress({ addressId, formData, token, userId }),
+    handlerSubmiAddress: ({ addressId, formData, userId }) => handlerSubmiAddress({ addressId, formData, token, userId, setAddress }),
 });
 
 export default ProfileHandler;

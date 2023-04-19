@@ -20,44 +20,51 @@ const UseDataUser = () => {
     const [dataStates, setDataStates] = useState([]);
     const [dataMunicipality, setDataMunicipality] = useState([]);
     const [dataLocation, setDataLocation] = useState([]);
-    const [fullAddress, setFullAddress] = useState({});
+    const [address, setAddress] = useState({});
     const [addressId, setAddressId] = useState(null);
     const [TbUserId, setTbUserId] = useState(null);
+    // Avatar del usuario
     const [avatar, setAvatar] = useState('https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg');
     const { user, token, setUser } = useAppContext();
 
     useEffect(() => {
         const { firstName, lastName, email, mobile, id } = user;
-        let { address } = user;
-        let fullAddress = address?.fullAddress || '';
-        fullAddress = fullAddress.length > 0 ? JSON.parse(fullAddress) : {};
-        const postalCode = address?.postalCode || '';
-        const tbUserId = address?.TbUserId || null;
-        const addreesId = address?.id || null;
-        const description = address?.description || '';
-        const street = fullAddress.street || '';
-        const countryId = fullAddress.countryId || '';
-        const stateId = fullAddress.stateId || '';
-        const municipalityId = fullAddress.municipalityId || '';
-        const locationId = fullAddress.locationId || '';
+        let address = user?.address || [];
         const fullName = `${firstName} ${lastName}`;
+        setAddress(address);
         setUserId(id);
         setFirstName(firstName);
         setLastName(lastName);
         setEmail(email);
         setFullName(fullName);
         setMobile(mobile);
+    }, [user]);
+
+    useEffect(() => {
+        let fullAddress = Object.keys(address).length > 0 ? address[0]?.fullAddress : {};
+        const postalCode = address[0]?.postalCode || '';
+        const tbUserId = address[0]?.TbUserId || null;
+        const addreesId = address[0]?.id || null;
+        const description = address[0]?.description || '';
         setPostalCode(postalCode);
         setDescription(description);
-        setStreet(street);
-        setFullAddress(fullAddress);
-        setCountry(countryId);
-        setState(stateId);
-        setMunicipality(municipalityId);
-        setLocation(locationId);
         setTbUserId(tbUserId);
         setAddressId(addreesId);
-    }, [user]);
+
+        if(fullAddress !== undefined && fullAddress.length > 0){            
+            fullAddress = JSON.parse(fullAddress);
+            const street = fullAddress?.street || '';
+            const countryId = fullAddress?.countryId || '';
+            const stateId = fullAddress?.stateId || '';
+            const municipalityId = fullAddress?.municipalityId || '';
+            const locationId = fullAddress?.locationId || '';
+            setCountry(countryId);
+            setState(stateId);
+            setMunicipality(municipalityId);
+            setLocation(locationId);
+            setStreet(street);    
+        }
+    }, [address]);
 
     return {
         userId,
@@ -83,9 +90,9 @@ const UseDataUser = () => {
         dataLocation, setDataLocation, setUser,
         municipalityId, setMunicipality,
         dataMunicipality, setDataMunicipality,
-        fullAddress, setFullAddress,
         TbUserId, setTbUserId,
         addressId, setAddressId,
+        setAddress
     }
 }
 

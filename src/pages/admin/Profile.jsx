@@ -35,10 +35,10 @@ const Profile = () => {
     dataLocation, setDataLocation, setUser,
     municipalityId, setMunicipality,
     dataMunicipality, setDataMunicipality,
-    addressId
+    addressId, setAddress
   } = UseDataUser();
 
-  const { handlerSubmiProfile, handlerSubmiAddress } = ProfileHandler({ setUser, token });
+  const { handlerSubmiProfile, handlerSubmiAddress } = ProfileHandler({ setUser, setAddress, token });
 
   const {
     getCountries,
