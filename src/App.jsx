@@ -7,6 +7,7 @@ import Home from "./pages/admin/Home";
 import Profile from "./pages/admin/Profile";
 import Error404 from "./pages/Error404";
 import Tickets from "./pages/admin/Tickets";
+import Users from './pages/configurations/Users';
 
 const App = () => {
   return (
@@ -19,6 +20,7 @@ const App = () => {
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
           <Route path="tickets" element={<Tickets />} />
+          <Route path="users" element={<Users />} />
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>

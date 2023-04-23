@@ -9,6 +9,7 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import LoginHook from '../pages/auth/hooks/Login.hook';
 import Notifications from './Notifications';
+import SelectCheckbox from './SelectCheckbox';
 import UseDataUser from '../pages/auth/hooks/useDataUser';
 
 const Header = () => {
@@ -16,11 +17,16 @@ const Header = () => {
   const {
     fullName,
     email,
+    companies
   } = UseDataUser();
 
   return (
     <header className="h-[7vh] md:h-[10vh] border-b border-secondary-100 p-8 flex items-center justify-end">
       <nav className="flex items-center gap-2">
+        {/* Componente selector de compañía */}
+        {companies.length > 0 && (
+          <SelectCheckbox companies={companies} />
+        )}
         {/* Componente notificaciones */}
         <Notifications />
         <Menu

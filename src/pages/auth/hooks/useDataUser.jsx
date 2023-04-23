@@ -8,6 +8,7 @@ const UseDataUser = () => {
     const [mobile, setMobile] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [companies, setCompanies] = useState([]);
     const [numFijo, setNumFijo] = useState('');
     const [postalCode, setPostalCode] = useState('');
     const [street, setStreet] = useState('');
@@ -28,7 +29,8 @@ const UseDataUser = () => {
     const { user, token, setUser } = useAppContext();
 
     useEffect(() => {
-        const { firstName, lastName, email, mobile, id } = user;
+        console.log("Modelo de usuario!!!!!!!!!",user);
+        const { firstName, lastName, email, mobile, id, companies } = user;
         let address = user?.address || [];
         const fullName = `${firstName} ${lastName}`;
         setAddress(address);
@@ -38,6 +40,7 @@ const UseDataUser = () => {
         setEmail(email);
         setFullName(fullName);
         setMobile(mobile);
+        setCompanies(companies);
     }, [user]);
 
     useEffect(() => {
@@ -51,7 +54,7 @@ const UseDataUser = () => {
         setTbUserId(tbUserId);
         setAddressId(addreesId);
 
-        if(fullAddress !== undefined && fullAddress.length > 0){            
+        if (fullAddress !== undefined && fullAddress.length > 0) {
             fullAddress = JSON.parse(fullAddress);
             const street = fullAddress?.street || '';
             const countryId = fullAddress?.countryId || '';
@@ -62,7 +65,7 @@ const UseDataUser = () => {
             setState(stateId);
             setMunicipality(municipalityId);
             setLocation(locationId);
-            setStreet(street);    
+            setStreet(street);
         }
     }, [address]);
 
@@ -92,7 +95,7 @@ const UseDataUser = () => {
         dataMunicipality, setDataMunicipality,
         TbUserId, setTbUserId,
         addressId, setAddressId,
-        setAddress
+        setAddress, companies, setCompanies
     }
 }
 
