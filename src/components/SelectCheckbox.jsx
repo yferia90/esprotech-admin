@@ -10,7 +10,6 @@ const SelectCheckbox = ({ companies }) => {
     const handlerCheckCompany = (evt) => {
         const { name } = evt.target;
         const checked = evt.target.checked;
-        console.log("Checkbox cambio!!!!", { name, checked, evt });
     }
 
     return (
@@ -26,11 +25,11 @@ const SelectCheckbox = ({ companies }) => {
             arrow
             arrowClassName="bg-secondary-100"
             transition
-            menuClassName="bg-secondary-100 p-4"
+            menuClassName="bg-secondary-100 p-2"
         >
             <>
                 {companies && companies.map((item, index) => (
-                    <div className="w-64 mt-2 p-4 bg-secondary-100 shadow rounded">
+                    <div key={index} className="w-64 mt-2 p-2 bg-secondary-100 shadow rounded">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
                                 <div className="pl-4 flex items-center">

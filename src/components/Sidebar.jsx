@@ -1,23 +1,45 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   RiBarChart2Line,
   RiEarthLine,
   RiCustomerService2Line,
-  RiCalendarTodoLine,
   RiLogoutCircleRLine,
   RiArrowRightSLine,
   RiMenu3Line,
   RiCloseLine,
+  RiSettings2Fill,
+  RiStockFill,
 } from "react-icons/ri";
 import LoginHook from '../pages/auth/hooks/Login.hook';
+import SidebarHook from './hooks/Sidebar.hook';
+import constants from './constants/menu.constants';
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const [showMenuStock, setShowMenuStock] = useState(false);
   const [showMenuCRM, setShowMenuCRM] = useState(false);
   const [showMenuConfig, setShowMenuConfig] = useState(false);
   const { setCloseSession } = LoginHook();
+  const { 
+    classCompany, 
+    setClassCompany, 
+    classUser, 
+    setClassUser, 
+    classClient, 
+    setClassClient, 
+    classSupplier, 
+    setClassSupplier, 
+    classCategory, 
+    setClassCategory, 
+    classProduct, 
+    setClassProduct,
+    classStore, 
+    setClassStore,
+    classMove,
+    setClassMove 
+  } = SidebarHook();
 
   return (
     <>
@@ -52,24 +74,30 @@ const Sidebar = () => {
                 />
               </button>
               <ul
-                className={` ${showMenuCRM ? "h-[100px]" : "h-0"
+                className={` ${showMenuCRM ? "h-[81px]" : "h-0"
                   } overflow-y-hidden transition-all`}
               >
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                  <div
+                    onClick={() => {
+                      setClassClient(constants.CRM.CLIENT.CLASSNAME.pointer);
+                      navigate(`${constants.CRM.CLIENT.PATH}`);
+                    }}
+                    className={classClient}
                   >
-                    Clientes
-                  </Link>
+                    {constants.CRM.CLIENT.NAME}
+                  </div>
                 </li>
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                <div
+                    onClick={() => {
+                      setClassSupplier(constants.CRM.SUPPLIER.CLASSNAME.pointer);
+                      navigate(`${constants.CRM.SUPPLIER.PATH}`);
+                    }}
+                    className={classSupplier}
                   >
-                    Proveedores
-                  </Link>
+                    {constants.CRM.SUPPLIER.NAME}
+                  </div>
                 </li>
               </ul>
             </li>
@@ -79,7 +107,7 @@ const Sidebar = () => {
                 className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
               >
                 <span className="flex items-center gap-4">
-                  <RiEarthLine className="text-primary" /> Inventario
+                  <RiStockFill className="text-primary" /> Inventario
                 </span>
                 <RiArrowRightSLine
                   className={`mt-1 ${showMenuStock && "rotate-90"
@@ -91,36 +119,48 @@ const Sidebar = () => {
                   } overflow-y-hidden transition-all`}
               >
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                <div
+                    onClick={() => {
+                      setClassCategory(constants.STOCK.CATEGORY.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.CATEGORY.PATH}`);
+                    }}
+                    className={classCategory}
                   >
-                    Categorías
-                  </Link>
+                    {constants.STOCK.CATEGORY.NAME}
+                  </div>
                 </li>
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                <div
+                    onClick={() => {
+                      setClassProduct(constants.STOCK.PRODUCT.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.PRODUCT.PATH}`);
+                    }}
+                    className={classProduct}
                   >
-                    Productos
-                  </Link>
+                    {constants.STOCK.PRODUCT.NAME}
+                  </div>
                 </li>
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                <div
+                    onClick={() => {
+                      setClassStore(constants.STOCK.STORE.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.STORE.PATH}`);
+                    }}
+                    className={classStore}
                   >
-                    Almacenes
-                  </Link>
+                    {constants.STOCK.STORE.NAME}
+                  </div>
                 </li>
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                <div
+                    onClick={() => {
+                      setClassMove(constants.STOCK.MOVE.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.MOVE.PATH}`);
+                    }}
+                    className={classMove}
                   >
-                    Movimientos
-                  </Link>
+                    {constants.STOCK.MOVE.NAME}
+                  </div>
                 </li>
               </ul>
             </li>
@@ -131,7 +171,7 @@ const Sidebar = () => {
                 className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
               >
                 <span className="flex items-center gap-4">
-                  <RiEarthLine className="text-primary" /> Configuración
+                  <RiSettings2Fill className="text-primary" /> Configuración
                 </span>
                 <RiArrowRightSLine
                   className={`mt-1 ${showMenuConfig && "rotate-90"
@@ -143,20 +183,26 @@ const Sidebar = () => {
                   } overflow-y-hidden transition-all`}
               >
                 <li>
-                  <Link
-                    to="/admin"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                  <div
+                    onClick={() => {
+                      setClassCompany(constants.BASE.COMPANY.CLASSNAME.pointer);
+                      navigate(`${constants.BASE.COMPANY.PATH}`);
+                    }}
+                    className={classCompany}
                   >
-                    Compañías
-                  </Link>
+                    {constants.BASE.COMPANY.NAME}
+                  </div>
                 </li>
                 <li>
-                  <Link
-                    to="/admin/users"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                  <div
+                    onClick={() => {
+                      setClassUser(constants.BASE.USER.CLASSNAME.pointer);
+                      navigate(`${constants.BASE.USER.PATH}`);
+                    }}
+                    className={classUser}
                   >
-                    Usuarios
-                  </Link>
+                    {constants.BASE.USER.NAME}
+                  </div>
                 </li>
               </ul>
             </li>

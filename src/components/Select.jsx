@@ -29,7 +29,7 @@ const Select = ({ onChangeSelect, data = [], initialValue = null }) => {
                 )
             }
             {
-                data && data.map(item => <option value={item.id}>{item.name}</option>)
+                data && data.map((item, index) => (<option key={index} value={item.id}>{item.name}</option>))
             }
         </select>
     )

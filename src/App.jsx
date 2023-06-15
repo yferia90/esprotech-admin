@@ -5,9 +5,12 @@ import Register from "./pages/auth/Register";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import Home from "./pages/admin/Home";
 import Profile from "./pages/admin/Profile";
+import EditUser from './pages/base/UserEdit';
+import Company from './pages/base/Company';
+import CompanyDetail from './pages/base/CompanyDetail';
 import Error404 from "./pages/Error404";
 import Tickets from "./pages/admin/Tickets";
-import Users from './pages/configurations/Users';
+import User from './pages/base/User';
 
 const App = () => {
   return (
@@ -19,8 +22,11 @@ const App = () => {
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="tickets" element={<Tickets />} />
-          <Route path="users" element={<Users />} />
+          <Route path="company" element={<Company />} />
+          <Route path="company/detail/:id" element={<CompanyDetail />} />
+          <Route path="user" element={<User />} />
+          <Route path="user/edit/:id" element={<EditUser />} />
+          <Route path="tickets" element={<Tickets />} />          
         </Route>
         <Route path="*" element={<Error404 />} />
       </Routes>
