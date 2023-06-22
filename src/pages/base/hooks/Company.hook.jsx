@@ -13,13 +13,14 @@ const CompanyHook = ({ token }) => {
     }
 
     useEffect(() => {
-        document.title = 'Listado de compañías';
+        document.title = 'Listado de negocios';
         searchListCompany();
     }, [])
 
     return {
         companies,
-        loading
+        loading,
+        setCompanies
     }
 }
 

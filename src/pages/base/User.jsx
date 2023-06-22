@@ -4,21 +4,176 @@ import { useNavigate } from "react-router-dom";
 import {
     RiFilter2Fill,
     RiArrowRightSLine,
-    RiArrowLeftSLine
+    RiArrowLeftSLine,
+    RiEdit2Line,
+    RiEyeOffLine,
+    RiMailLine,
+    RiLockLine,
+    RiEyeLine,
+    RiHome2Line,
+    RiCodeLine,
+    RiCoinLine
 } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 
 import useAppContext from "../../contexts/App.context";
 import UserHook from './hooks/User.hook';
+import UserEditHook from './hooks/UserEdit.hook';
+import ToastForm from '../../components/ToastForm';
+import CustomModal from '../../components/CustomModal';
 
 const User = () => {
     const navigate = useNavigate();
     const { token } = useAppContext();
     const { users, loading } = UserHook({ token });
+    const { 
+        titleForm, showModal, saving,
+        handlerCancelForm, handlerSubmitForm,
+        errorSubmit, warningForm, addForm,
+        messageError, messageSuccess,
+        handlerClickShowModal, firstName, setFirstName,
+        lastName, setLastName, email, setEmail,
+        password, setPassword, showPassword, setShowPassword,
+        mobile, setMobile, filePreview, handlerFileChange
+    } = UserEditHook({ token });
+
+const FormUser = () => {
+        // flex relative mb-4 md:justify-between Para dividir la pantalla en dos campos
+        return (
+            <div className="rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
+            <div className="md:col-span-4">
+                <hr className="border-gray-500/30 p-2" />
+                <form className="mb-8">
+                    <div className="flex items-center mb-8">
+                      <div className="relative mb-4">
+                          <img
+                            src={filePreview}
+                            className="w-28 h-28 object-cover rounded-lg"
+                          />
+                          <label
+                            htmlFor="avatar"
+                            className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+                          >
+                            <RiEdit2Line />
+                          </label>
+                          <input                   
+                            type="file"
+                            name="file"
+                            id="avatar"
+                            className="hidden"
+                            onChange={handlerFileChange}
+                            />
+                        </div> 
+                    </div>
+                    <div className="relative mb-4">
+                      <RiHome2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <input
+                        type="text"
+                        name="firstName"
+                        value={firstName}
+                        onChange={(evt) => {
+                            setFirstName(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Nombre de usuario"
+                      />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiCodeLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <input
+                        type="text"
+                        name="lastName"
+                        value={lastName}
+                        onChange={(evt) => {
+                            setLastName(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Apellidos"
+                      />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <input
+                        type="email"
+                        name="email"
+                        value={email}
+                        onChange={(evt) => {
+                            setEmail(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Correo electrónico"
+                      />
+                    </div>
+                    <div className="relative mb-8">
+                        <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          className="py-3 px-8 bg-secondary-900 w-full outline-none rounded-lg"
+                          placeholder="Contraseña actual"
+                          onChange={(event) => {
+                            const value = event.target.value;
+                            setPassword(value);
+                          }}
+                        />
+                        {showPassword ? (
+                          <RiEyeOffLine
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                          />
+                        ) : (
+                          <RiEyeLine
+                            onClick={() => setShowPassword(!showPassword)}
+                            className="absolute top-1/2 -translate-y-1/2 right-2 hover:cursor-pointer text-primary"
+                          />
+                        )}
+                    </div>
+                    <div className="relative mb-4">
+                      <RiCoinLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <input
+                        type="text"
+                        name="mobile"
+                        value={mobile}
+                        onChange={(evt) => {
+                            setMobile(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Número de celular"
+                      />
+                    </div>
+                </form>
+                <hr className="border-gray-500/30" />
+            </div>
+          </div>
+        )
+    }
 
     return (
         <div>
+            {
+                errorSubmit && (
+                    <ToastForm title={messageError} type="error" />
+                )
+            }
+            {
+                warningForm && (
+                    <ToastForm title="Hay campos requeridos sin completar" type="warning" />
+                )
+            }
+            {
+                addForm && (
+                    <ToastForm title={messageSuccess} type="success" />
+                )
+            }
+            <CustomModal
+                showModal={showModal}
+                title={titleForm}
+                bodyModal={FormUser}
+                cancelModal={() => handlerCancelForm()}
+                confirmModal={() => handlerSubmitForm()}
+                saving={saving}
+            />
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 mb-10 bg-secondary-100 p-8 rounded-xl">
                 <div>
                     <h1 className="font-bold text-gray-100 text-xl">Listado de usuarios</h1>
@@ -27,7 +182,9 @@ const User = () => {
                     <button className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
                         <RiFilter2Fill /> Filter
                     </button>
-                    <button className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors">
+                    <button 
+                        onClick={() => handlerClickShowModal({ addDetail: false})}
+                        className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors">
                         Crear usuario
                     </button>
                 </div>

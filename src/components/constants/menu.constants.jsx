@@ -17,18 +17,36 @@ export default {
             }
         }
     },
-    CRM: {
+    SALE: {
         CLIENT: {
             NAME: 'Clientes',
-            PATH: '/admin',
+            PATH: '/admin/sale/customer',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
             }
         },
+        ORDER_SALE: {
+            NAME: 'Ordenes de venta',
+            PATH: '/admin/sale/sale',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
+        }
+    },
+    PURCHASE: {
         SUPPLIER: {
-            NAME: 'Proveedor',
-            PATH: '/admin',
+            NAME: 'Proveedores',
+            PATH: '/admin/purchase/supplier',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
+        },
+        ORDER_PURCHASE: {
+            NAME: 'Ordenes de compra',
+            PATH: '/admin/purchase/purchase',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
@@ -38,7 +56,7 @@ export default {
     STOCK: {
         CATEGORY: {
             NAME: 'Categorías',
-            PATH: '/admin',
+            PATH: '/admin/stock/category',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
@@ -46,7 +64,7 @@ export default {
         },
         PRODUCT: {
             NAME: 'Productos',
-            PATH: '/admin',
+            PATH: '/admin/stock/product',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
@@ -60,9 +78,17 @@ export default {
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
             }
         },
-        MOVE: {
-            NAME: 'Movimientos',
-            PATH: '/admin',
+        INCOMING_MOVE: {
+            NAME: 'Movimiento de entrada',
+            PATH: '/admin/stock/incoming/move',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
+        },
+        EXIT_MOVE: {
+            NAME: 'Movimiento de salida',
+            PATH: '/admin/stock/exit/move',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer'

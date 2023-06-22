@@ -18,140 +18,43 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import 'react-toastify/dist/ReactToastify.css';
 import useAppContext from "../../contexts/App.context";
-import CompanyHook from './hooks/Company.hook';
-import CompanyAddEditHook from './hooks/CompanyAddEdit.hook';
-import ToastForm from '../../components/ToastForm';
-import CustomModal from '../../components/CustomModal';
+import SupplierHook from './hooks/Supplier.hook';
+// import CompanyAddEditHook from './hooks/CompanyAddEdit.hook';
+// import ToastForm from '../../components/ToastForm';
+// import CustomModal from '../../components/CustomModal';
 
-const Company = () => {
+const Supplier = () => {
     const navigate = useNavigate();
     const { token } = useAppContext();
-    const {
-        companies, loading,
-        setCompanies
-    } = CompanyHook({ token });
 
     const {
-        name, setName, code,setCode,
-        email, setEmail, mobile,
-        setMobile, parent,setParent,
-        handlerSubmitForm,errorAddCompany,
-        addCompany, warningCompany,
-        saving,handlerCancelForm,
-        handlerClickAddCompany,
-        titleForm, handlerClickEditCompany,
-        messageSuccess, messageError, newCompany
-    } = CompanyAddEditHook({ token, companies, setCompanies });
+        suppliers,
+        loading,
+        setSuppliers
+    } = SupplierHook({ token });
 
-    const FormCompany = () => {
-        return (
-            <div className="rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
-            <div className="md:col-span-4">
-                <hr className="border-gray-500/30 p-2" />
-                <form className="mb-8">                    
-                    <div className="relative mb-4">
-                    <RiHome2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-                      <input
-                        type="name"
-                        name="name"
-                        value={name}
-                        onChange={(evt) => {
-                            setName(evt.target.value);
-                        }}
-                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
-                        placeholder="Nombre del negocio"
-                      />
-                    </div>
-                    <div className="relative mb-4">
-                      <RiCodeLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-                      <input
-                        type="text"
-                        name="code"
-                        value={code}
-                        onChange={(evt) => {
-                            setCode(evt.target.value);
-                        }}
-                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
-                        placeholder="Código"
-                      />
-                    </div>
-                    <div className="relative mb-4">
-                      <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-                      <input
-                        type="email"
-                        name="email"
-                        value={email}
-                        onChange={(evt) => {
-                            setEmail(evt.target.value);
-                        }}
-                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
-                        placeholder="Correo electrónico"
-                      />
-                    </div>
-                    <div className="relative mb-4">
-                      <RiCoinLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
-                      <input
-                        type="text"
-                        name="mobile"
-                        value={mobile}
-                        onChange={(evt) => {
-                            setMobile(evt.target.value);
-                        }}
-                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
-                        placeholder="Número de celular"
-                      />
-                    </div>
-                </form>            
-                <hr className="border-gray-500/30" />
-            </div>
-            </div>            
-        )
-    }
 
     return (
-        <div>
-            {
-                errorAddCompany && (
-                    <ToastForm title={messageError} type="error" />
-                )
-            }
-            {
-                warningCompany && (
-                    <ToastForm title="Hay campos requeridos sin completar" type="warning" />
-                )
-            }
-            {
-                addCompany && (
-                    <ToastForm title={messageSuccess} type="success" />
-                )
-            }
-            <CustomModal
-                showModal={newCompany}
-                title={titleForm}
-                bodyModal={FormCompany}
-                cancelModal={() => handlerCancelForm()}
-                confirmModal={() => handlerSubmitForm()}
-                saving={saving}
-            />
+        <div>            
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 mb-10 bg-secondary-100 p-8 rounded-xl">
                 <div>
-                    <h1 className="font-bold text-gray-100 text-xl">Listado de negocios</h1>
+                    <h1 className="font-bold text-gray-100 text-xl">Listado de proveedores</h1>
                 </div>
                 <div className="flex items-center gap-4">
                     <button className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
                         <RiFilter2Fill /> Filter
                     </button>
                     <button
-                        onClick={() => handlerClickAddCompany({ addDetail: false})}
+                        // onClick={() => handlerClickAddCompany({ addDetail: false})}
                         className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors"
                         type="button"
                     >
-                        Nuevo negocio
+                        Nuevo proveedor
                     </button>
                 </div>
             </div>
             <div className="bg-secondary-100 p-8 rounded-xl">
-                { companies && companies.length > 0 && (
+                { suppliers && suppliers.length > 0 && (
                     <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
                         <h5>Nro</h5>
                         <h5>Código</h5>
@@ -167,7 +70,7 @@ const Company = () => {
                     </div>
                 )}
                 {
-                    companies && companies.map((element, index) => (
+                    suppliers && suppliers.map((element, index) => (
                         <div key={index} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl">
                             <div>
                                 <h5 className="md:hidden text-white font-bold mb-2">ID</h5>
@@ -227,7 +130,7 @@ const Company = () => {
                     ))
                 }
                 {
-                    companies && companies.length > 0 && (
+                    suppliers && suppliers.length > 0 && (
                         <div className="p-8 flex justify-center">
                             <nav className="flex items-center gap-2">
                                 <button className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
@@ -250,4 +153,4 @@ const Company = () => {
     );
 };
 
-export default Company;
+export default Supplier;

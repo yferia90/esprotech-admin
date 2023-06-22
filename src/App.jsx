@@ -11,6 +11,15 @@ import CompanyDetail from './pages/base/CompanyDetail';
 import Error404 from "./pages/Error404";
 import Tickets from "./pages/admin/Tickets";
 import User from './pages/base/User';
+import Customer from './pages/sale/Customer';
+import OrderSale from './pages/sale/OrderSale';
+import Category from './pages/stock/Category';
+import Product from './pages/stock/Product';
+import Store from './pages/stock/Store';
+import IncomingMove from './pages/stock/IncomingMove';
+import ExitMove from './pages/stock/ExitMove';
+import Supplier from './pages/purchase/Supplier';
+import OrderPurchase from './pages/purchase/OrderPurchase';
 
 const App = () => {
   return (
@@ -26,6 +35,15 @@ const App = () => {
           <Route path="company/detail/:id" element={<CompanyDetail />} />
           <Route path="user" element={<User />} />
           <Route path="user/edit/:id" element={<EditUser />} />
+          <Route path="sale/customer" element={<Customer />} />
+          <Route path="sale/sale" element={<OrderSale />} />
+          <Route path="stock/category" element={<Category />} />
+          <Route path="stock/product" element={<Product />} />
+          <Route path="stock/store" element={<Store />} />
+          <Route path="stock/incoming/move" element={<IncomingMove />} />
+          <Route path="stock/exit/move" element={<ExitMove />} />
+          <Route path="purchase/supplier" element={<Supplier />} />
+          <Route path="purchase/purchase" element={<OrderPurchase />} />
           <Route path="tickets" element={<Tickets />} />          
         </Route>
         <Route path="*" element={<Error404 />} />

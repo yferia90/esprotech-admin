@@ -1,4 +1,8 @@
-import { getUsers, getUserId } from "../api/User.api";
+import { 
+    getUsers, 
+    getUserId,
+    uploadAvatar
+} from "../api/User.api";
 
 const handlerListUsers = async ({ token }) => {
     const users = await getUsers({ token });
@@ -20,14 +24,18 @@ const handlerListUsers = async ({ token }) => {
 
 const handlerGetUserById = async ({ token, id }) => {
     const user = await getUserId({ token, id });
-    console.log('Detalle del usuario!!!',user);
     return user?.user;
+}
+
+const uploadAvatarUser = async ({ token, formData }) => {
+    const result = await uploadAvatar({ token, formData });
+    return result;
 }
 
 const UserHandler = ({ token }) => ({
     handlerListUsers: () => handlerListUsers({ token }),
-    handlerGetUserById: ({ id }) => handlerGetUserById({ token, id})
-
+    handlerGetUserById: ({ id }) => handlerGetUserById({ token, id}),
+    uploadAvatarUser: ({ formData }) => uploadAvatarUser({ token, formData})
 });
 
 export default UserHandler;

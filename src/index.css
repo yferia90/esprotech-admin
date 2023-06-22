@@ -10,3 +10,12 @@
   --tw-text-opacity: 1;
   color: "#DC2626";
 }
+
+.max-w-lg-modal {
+  max-width: 44rem;
+}
+
+
+.box-content-modal {
+  color:#131517;
+}

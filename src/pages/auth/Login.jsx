@@ -9,7 +9,7 @@ import {
 import LoginHook from './hooks/Login.hook';
 import LoginHandler from './handler/login.handler';
 import useAppContext from '../../contexts/App.context';
-import AlertError from "../../components/alertError";
+import AlertError from "../../components/AlertError";
 
 const Login = () => {
   const { setToken, setUser } = useAppContext();
@@ -34,14 +34,19 @@ const Login = () => {
     evt.preventDefault();
     const result = await handlerSubmitLogin({ email, password });
     if (result) navigate('/admin');
-    else setShowAlertError(true);
+    else {
+     setShowAlertError(true);
+     setTimeout(() => {
+      setShowAlertError(false);
+     },5000) ;
+    }
   }
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
         {showAlertError && (
-          <AlertError title='Ups, tenemos un problema!' description='Usuario o contraseña incorrecta.' setShowAlertError={setShowAlertError} />
+          <AlertError title='Ups, tenemos un problema!' description='Estas credenciales no coinciden con un usuario registrado' setShowAlertError={setShowAlertError} />
         )}
         <h1 className="text-3xl text-center uppercase font-bold tracking-[5px] text-white mb-8">
           Iniciar <span className="text-primary">sesión</span>

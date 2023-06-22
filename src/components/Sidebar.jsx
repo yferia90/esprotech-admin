@@ -20,25 +20,19 @@ const Sidebar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showMenuStock, setShowMenuStock] = useState(false);
   const [showMenuCRM, setShowMenuCRM] = useState(false);
+  const [showMenuPurchase, setShowMenuPurchase] = useState(false);
   const [showMenuConfig, setShowMenuConfig] = useState(false);
   const { setCloseSession } = LoginHook();
+
   const { 
-    classCompany, 
-    setClassCompany, 
-    classUser, 
-    setClassUser, 
-    classClient, 
-    setClassClient, 
-    classSupplier, 
-    setClassSupplier, 
-    classCategory, 
-    setClassCategory, 
-    classProduct, 
-    setClassProduct,
-    classStore, 
-    setClassStore,
-    classMove,
-    setClassMove 
+    classCompany, setClassCompany, classUser, 
+    setClassUser, classClient, setClassClient, 
+    classOrderSale, setClassOrderSale, classCategory, 
+    setClassCategory, classProduct, setClassProduct,
+    classStore, setClassStore, classMove, setClassMove,
+    classExitMove, setClassExitMove,
+    classSupplier, setClassSupplier,
+    classOrderPurchase, setClassOrderPurchase
   } = SidebarHook();
 
   return (
@@ -66,7 +60,7 @@ const Sidebar = () => {
                 className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
               >
                 <span className="flex items-center gap-4">
-                  <RiEarthLine className="text-primary" /> CRM
+                  <RiEarthLine className="text-primary" /> Ventas
                 </span>
                 <RiArrowRightSLine
                   className={`mt-1 ${showMenuCRM && "rotate-90"
@@ -80,23 +74,64 @@ const Sidebar = () => {
                 <li>
                   <div
                     onClick={() => {
-                      setClassClient(constants.CRM.CLIENT.CLASSNAME.pointer);
-                      navigate(`${constants.CRM.CLIENT.PATH}`);
+                      setClassClient(constants.SALE.CLIENT.CLASSNAME.pointer);
+                      navigate(`${constants.SALE.CLIENT.PATH}`);
                     }}
                     className={classClient}
                   >
-                    {constants.CRM.CLIENT.NAME}
+                    {constants.SALE.CLIENT.NAME}
                   </div>
                 </li>
                 <li>
                 <div
                     onClick={() => {
-                      setClassSupplier(constants.CRM.SUPPLIER.CLASSNAME.pointer);
-                      navigate(`${constants.CRM.SUPPLIER.PATH}`);
+                      setClassOrderSale(constants.SALE.ORDER_SALE.CLASSNAME.pointer);
+                      navigate(`${constants.SALE.ORDER_SALE.PATH}`);
+                    }}
+                    className={classOrderSale}
+                  >
+                    {constants.SALE.ORDER_SALE.NAME}
+                  </div>
+                </li>
+              </ul>
+            </li>
+            <li>
+              <button
+                onClick={() => setShowMenuPurchase(!showMenuPurchase)}
+                className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+              >
+                <span className="flex items-center gap-4">
+                  <RiEarthLine className="text-primary" /> Compra
+                </span>
+                <RiArrowRightSLine
+                  className={`mt-1 ${showMenuPurchase && "rotate-90"
+                    } transition-all`}
+                />
+              </button>
+              <ul
+                className={` ${showMenuPurchase ? "h-[81px]" : "h-0"
+                  } overflow-y-hidden transition-all`}
+              >
+                <li>
+                  <div
+                    onClick={() => {
+                      setClassSupplier(constants.PURCHASE.SUPPLIER.CLASSNAME.pointer);
+                      navigate(`${constants.PURCHASE.SUPPLIER.PATH}`);
                     }}
                     className={classSupplier}
                   >
-                    {constants.CRM.SUPPLIER.NAME}
+                    {constants.PURCHASE.SUPPLIER.NAME}
+                  </div>
+                </li>
+                <li>
+                <div
+                    onClick={() => {
+                      setClassOrderPurchase(constants.PURCHASE.ORDER_PURCHASE.CLASSNAME.pointer);
+                      navigate(`${constants.PURCHASE.ORDER_PURCHASE.PATH}`);
+                    }}
+                    className={classOrderPurchase}
+                  >
+                    {constants.PURCHASE.ORDER_PURCHASE.NAME}
                   </div>
                 </li>
               </ul>
@@ -115,7 +150,7 @@ const Sidebar = () => {
                 />
               </button>
               <ul
-                className={` ${showMenuStock ? "h-[160px]" : "h-0"
+                className={` ${showMenuStock ? "h-[225px]" : "h-0"
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -154,12 +189,23 @@ const Sidebar = () => {
                 <li>
                 <div
                     onClick={() => {
-                      setClassMove(constants.STOCK.MOVE.CLASSNAME.pointer);
-                      navigate(`${constants.STOCK.MOVE.PATH}`);
+                      setClassMove(constants.STOCK.INCOMING_MOVE.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.INCOMING_MOVE.PATH}`);
                     }}
                     className={classMove}
                   >
-                    {constants.STOCK.MOVE.NAME}
+                    {constants.STOCK.INCOMING_MOVE.NAME}
+                  </div>
+                </li>
+                <li>
+                <div
+                    onClick={() => {
+                      setClassExitMove(constants.STOCK.EXIT_MOVE.CLASSNAME.pointer);
+                      navigate(`${constants.STOCK.EXIT_MOVE.PATH}`);
+                    }}
+                    className={classExitMove}
+                  >
+                    {constants.STOCK.EXIT_MOVE.NAME}
                   </div>
                 </li>
               </ul>

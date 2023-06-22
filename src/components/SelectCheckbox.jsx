@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Menu, MenuButton } from "@szhsin/react-menu";
 import {
     RiArrowDownSLine,
@@ -5,19 +6,35 @@ import {
 } from "react-icons/ri";
 
 
-const SelectCheckbox = ({ companies }) => {
+const SelectCheckbox = ({ data }) => {
+    const [dataAll, setDataAll] = useState([]);
 
     const handlerCheckCompany = (evt) => {
-        const { name } = evt.target;
-        const checked = evt.target.checked;
+        if(dataAll.length > 1){
+            const { name } = evt.target;
+            const checked = evt.target.checked;
+            const newDataAll = data.map(item => {
+                if(item.name === name) item.checked = checked;
+                return item;
+            });
+            setDataAll(newDataAll);
+        }
     }
+
+    useEffect(() => {
+        const newDataAll = data.map((item, index) => {
+            item.checked = index === 0 ? true :  false;
+            return item;
+        });
+        setDataAll(newDataAll);
+    }, []);
 
     return (
         <Menu
             menuButton={
                 <MenuButton className="flex items-center gap-x-2 hover:bg-secondary-100 p-2 rounded-lg transition-colors">
                     <RiBuildingFill />
-                    <span>Compañías</span>
+                    <span>Negocios</span>
                     <RiArrowDownSLine />
                 </MenuButton>
             }
@@ -28,7 +45,7 @@ const SelectCheckbox = ({ companies }) => {
             menuClassName="bg-secondary-100 p-2"
         >
             <>
-                {companies && companies.map((item, index) => (
+                {dataAll && dataAll.map((item, index) => (
                     <div key={index} className="w-64 mt-2 p-2 bg-secondary-100 shadow rounded">
                         <div className="flex items-center justify-between">
                             <div className="flex items-center">
@@ -40,6 +57,7 @@ const SelectCheckbox = ({ companies }) => {
                                             }}
                                             name={item.name}
                                             type="checkbox"
+                                            checked={item.checked}
                                             className="checkbox opacity-0 absolute cursor-pointer w-full h-full" />
                                         <div className="check-icon hidden bg-primary text-white rounded-sm">
                                             <svg className="icon icon-tabler icon-tabler-check" xmlns="http://www.w3.org/2000/svg" width={12} height={12} viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
