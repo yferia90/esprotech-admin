@@ -68,7 +68,6 @@ const UserEditHook = ({ token }) => {
           let formData = new FormData();
           formData.append('file', _file);
           const fileUpload = await uploadAvatarUser({ formData });
-          console.log("fileUpload!!!!!!!!",fileUpload);
           if(!fileUpload.error){
             setAvatar(fileUpload?.data?.path);
             return;

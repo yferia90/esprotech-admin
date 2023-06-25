@@ -12,8 +12,8 @@ import useAppContext from '../../contexts/App.context';
 import AlertError from "../../components/AlertError";
 
 const Login = () => {
-  const { setToken, setUser } = useAppContext();
-  const { handlerSubmitLogin } = LoginHandler({ setToken, setUser });
+  const { setToken, setUser, setCompanyId } = useAppContext();
+  const { handlerSubmitLogin } = LoginHandler({ setToken, setUser, setCompanyId });
   const navigate = useNavigate();
   const {
     showPassword,

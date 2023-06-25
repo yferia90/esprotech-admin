@@ -6,6 +6,7 @@ export const AppContext = createContext(null);
 // Creando el provider
 export const AppContextProvider = ({ children }) => {
     const [token, setToken] = useState(null);
+    const [companyId, setCompanyId] = useState(null);
     const [titleNavBar, setTitleNavBar] = useState('Dashboard');
     const [user, setUser] = useState({});
 
@@ -14,7 +15,9 @@ export const AppContextProvider = ({ children }) => {
         userLocal = userLocal && userLocal.length > 0 ? JSON.parse(userLocal) : null;
         if (userLocal !== null) {
             setToken(userLocal?.token);
-            setUser(userLocal?.data[0]);
+            const _userLocal = userLocal?.data[0];
+            setCompanyId(_userLocal?.companies[0]?.id);
+            setUser(_userLocal);
             updateFetchAxios();
         }
     }, []);
@@ -22,6 +25,8 @@ export const AppContextProvider = ({ children }) => {
     const values = React.useMemo(() => (
         {
             token,
+            companyId,
+            setCompanyId,
             user,
             setUser,
             setToken,
@@ -30,6 +35,8 @@ export const AppContextProvider = ({ children }) => {
         }
     ), [
         token,
+        companyId,
+        setCompanyId,
         user,
         setUser,
         setToken,
