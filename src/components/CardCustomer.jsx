@@ -6,11 +6,12 @@ import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
 import CustomerAvatar from './img/customer.png';
 
-const CardCustomer = ({ data, color='bg-white', key, handlerDelete }) => {
+const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, handlerEdit }) => {
   const [fullName, setFullName] = useState('');
   const [mobile, setMobile] = useState('');
   const [avatar, setAvatar] = useState(CustomerAvatar);
   const [id, setId] = useState('');
+  const [keyCard, setKeyCard] = useState(0);
 
   useEffect(() => {
       const name = `${data?.firstName} ${data?.lastName}`
@@ -20,10 +21,11 @@ const CardCustomer = ({ data, color='bg-white', key, handlerDelete }) => {
       if(data?.avatar){
         setAvatar(data?.avatar);
       }
-  },[]);
+      setKeyCard(customerKey);
+  },[data, customerKey]);
 
   return (
-    <div key={key} className={`p-8 rounded-xl ${color}`}>
+    <div key={keyCard} className={`p-8 rounded-xl ${color}`}>
       <div className="flex items-center justify-end mb-4">
         <div>
           <Menu
@@ -40,7 +42,7 @@ const CardCustomer = ({ data, color='bg-white', key, handlerDelete }) => {
           >
             <MenuItem className="p-0 hover:bg-transparent">
               <div
-                onClick={() => {}}
+                onClick={() => handlerEdit(id)}                
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
               >
                 Editar

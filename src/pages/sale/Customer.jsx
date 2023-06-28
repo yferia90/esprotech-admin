@@ -39,7 +39,7 @@ const Customer = () => {
         lastName, setLastName, email, setEmail,        
         mobile, setMobile, filePreview, handlerFileChange,
         handlerDelete, customers, loading, setCustomers,
-        mode, setMode
+        mode, setMode, handlerEdit
     } = CustomerAddEditHook({ token, companyId });
 
     const FormCustomer = () => {
@@ -50,10 +50,12 @@ const Customer = () => {
                 <form className="mb-8">
                     <div className="flex items-center mb-8">
                       <div className="relative mb-4">
-                          <img
-                            src={filePreview}
-                            className="w-28 h-28 object-cover rounded-lg"
-                          />
+                          {filePreview && (
+                            <img
+                                src={filePreview}
+                                className="w-28 h-28 object-cover rounded-lg"
+                              />
+                          )}                          
                           <label
                             htmlFor="avatar"
                             className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
@@ -65,7 +67,7 @@ const Customer = () => {
                             name="file"
                             id="avatar"
                             className="hidden"
-                            onChange={handlerFileChange}
+                            onChange={(evt) => handlerFileChange(evt)}
                             />
                         </div> 
                     </div>
@@ -135,10 +137,11 @@ const Customer = () => {
                     customers && customers.map((element, index) => (
                         <CardCustomer 
                             color="bg-third" 
-                            key={index} 
-                            data={element} 
+                            data={element}
+                            customerKey={index} 
+                            handlerEdit = {(id) => handlerEdit(id)}
                             handlerDelete={(id) => handlerDelete(id)}
-                            />
+                        />
                     ))
                 }
             </div>
@@ -199,7 +202,7 @@ const Customer = () => {
                                 >
                                     <MenuItem className="p-0 hover:bg-transparent">
                                         <div
-                                            onClick={() => navigate(`/admin/company/detail/${element.id}`)}
+                                            // onClick={() => navigate(`/admin/company/detail/${element.id}`)}
                                             className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
                                         >
                                             Ver detalles
@@ -207,7 +210,7 @@ const Customer = () => {
                                     </MenuItem>
                                     <MenuItem className="p-0 hover:bg-transparent">
                                         <div
-                                            onClick={() => handlerClickEditCompany({ id: element.id })}
+                                            // onClick={() => handlerClickEditCompany({ id: element.id })}
                                             className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
                                         >
                                             Editar
@@ -271,20 +274,24 @@ const Customer = () => {
                     <h1 className="font-bold text-gray-100 text-xl">Listado de clientes</h1>
                 </div>
                 <div className="flex items-center gap-4">
-                    <Tooltip text="Vista en modo card">
-                        <button                         
-                            onClick={() => setMode('card')}
-                            className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 rounded-lg hover:text-primary transition-colors">
-                                <RiSdCardLine className="w-8 h-8" />
-                        </button>
-                    </Tooltip>
-                    <Tooltip text="Vista en modo listado">
-                        <button 
-                            onClick={() => setMode('list')}
-                            className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
-                                <RiFileList2Line className="w-8 h-8" />
-                        </button>
-                    </Tooltip>                    
+                    {customers && customers.length > 0 && (
+                        <Tooltip text="Vista en modo card">
+                            <button
+                                onClick={() => setMode('card')}
+                                className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 rounded-lg hover:text-primary transition-colors">
+                                    <RiSdCardLine className="w-8 h-8" />
+                            </button>
+                        </Tooltip>
+                    )}
+                    {customers && customers.length > 0 && (
+                        <Tooltip text="Vista en modo listado">
+                            <button 
+                                onClick={() => setMode('list')}
+                                className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
+                                    <RiFileList2Line className="w-8 h-8" />
+                            </button>
+                        </Tooltip>
+                    )}
                     <button
                         onClick={() => handlerClickShowModal({ addDetail: false})}
                         className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors"

@@ -10,6 +10,15 @@ const getCustomers = async ({ token }) => {
     return result?.data?.data;
 }
 
+const getCustomerById = async ({ token, id }) => {
+    const result = await axios.get(`${Env.REACT_APP_BACKEND}/customer/${id}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+    return result?.data;
+}
+
 const uploadAvatar = async ({ token, formData }) => {
     const result = await axios.post(`${Env.REACT_APP_BACKEND}/files?id=customers`, formData,
     {
@@ -42,10 +51,24 @@ const deleteCustomer = async ({ token, id }) => {
     return result;
 }
 
+const updateCustomer = async ({ token, formData, id }) => {
+    const result = await axios.put(`${Env.REACT_APP_BACKEND}/customer/${id}`,{
+        ...formData
+    },
+    {
+        headers: {
+            Authorization: token
+        }
+    });
+    return result?.data;
+}
+
 
 export {
+    getCustomerById,
     getCustomers,
     uploadAvatar,
     postCustomer,
-    deleteCustomer
+    deleteCustomer,
+    updateCustomer
 }

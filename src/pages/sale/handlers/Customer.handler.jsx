@@ -1,9 +1,11 @@
 import Env from '../../../../env';
 import { 
+    getCustomerById,
     getCustomers, 
     uploadAvatar, 
     postCustomer,
-    deleteCustomer
+    deleteCustomer,
+    updateCustomer,
 } from '../api/Customer.api';
 
 const getUrl = ({ avatar }) => {
@@ -21,20 +23,17 @@ const uploadAvatarCustomer = async ({ token, formData }) => {
     return result;
 }
 
-const handlerSubmitCustomer = async ({ customers, setCustomers, token, formData }) => {
+const handlerSubmitCustomer = async ({ token, formData }) => {
     try {
         let result = await postCustomer({ formData, token });
         const status = result?.data?.status;
-        let customer = result?.data?.data?.customer;
         if (status === 200) {
-            customer = {...customer, avatar: getUrl({ avatar: customer?.avatar })};
-            customers.unshift(customer);
-            setCustomers(customers);
-            return true;
+            const customer = result?.data?.data?.customer;
+            return customer;
         }
-        return false;
+        return null;
     } catch (err) {
-        return false;
+        return null;
     }
 }
 
@@ -42,20 +41,32 @@ const handlerDeleteCustomer = async ({ token, id }) => {
     try {
         let result = await deleteCustomer({ id, token });
         const status = result?.data?.status;
-        if (status === 200) {            
+        if (status === 200) {
             return true;
-        }else return [];
+        }else return false;
     } catch (err) {
-        return [];
+        return false;
     }
+}
+
+const handlerGetCustomerById = async ({ token, id }) => {
+    const customer = await getCustomerById({ token, id });
+    return customer?.data?.customer;
+}
+
+const handlerUpdateCustomer = async ({ token, formData, id }) => {
+    const customer = await updateCustomer({ token, formData, id });
+    return customer?.data?.customer;
 }
 
 const CustomerHandler = ({ token }) => ({
     getUrl: ({ avatar }) => getUrl({ avatar }),
     handlerListCustomers: () => handlerListCustomers({ token }),
     uploadAvatarCustomer: ({ formData }) => uploadAvatarCustomer({ token, formData }),
-    handlerSubmitCustomer: ({ customers, setCustomers, formData }) => handlerSubmitCustomer({ customers, setCustomers, token, formData }),
+    handlerSubmitCustomer: ({ formData }) => handlerSubmitCustomer({ token, formData }),
     handlerDeleteCustomer: ({ id }) => handlerDeleteCustomer({ token, id }),
+    handlerGetCustomerById: ({ id }) => handlerGetCustomerById({ token, id }),
+    handlerUpdateCustomer: ({ formData, id }) => handlerUpdateCustomer({ token, formData, id }),
 
 });
 

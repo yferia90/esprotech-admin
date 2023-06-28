@@ -14,12 +14,30 @@ const ToastForm = ({ title, type }) => {
         theme: "light",
     })
 
+    const types = {
+        success: () => {
+            toast.success(`${title}`, options);
+        },
+        error: () => {
+            toast.error(`${title}`, options);
+        },
+        info: () => {
+            toast.info(`${title}`, options);
+        },
+        warning: () => {
+            toast.warning(`${title}`, options);
+        }
+    }
+
+    const typesAction = (type) => {
+      if (types.hasOwnProperty(type)) {
+        types[type]();
+      }
+    }
+
     useEffect(() => {
-        if(type === 'success') toast.success(`${title}`, options);
-        else if(type === 'error') toast.error(`${title}`, options);
-        else if(type === 'info') toast.info(`${title}`, options);
-        else if(type === 'warning') toast.warning(`${title}`, options);
-    });
+        typesAction(type);
+    }, [type]);
 
     return (
         <>
