@@ -1,8 +1,14 @@
+import Env from '../../../../env';
 import { 
     getUsers, 
     getUserId,
     uploadAvatar
 } from "../api/User.api";
+
+const getUrl = ({ avatar }) => {
+    const url = avatar ? `${Env.REACT_APP_BACKEND}files?path=${avatar}` : undefined;
+    return url;
+}
 
 const handlerListUsers = async ({ token }) => {
     const users = await getUsers({ token });
@@ -16,6 +22,10 @@ const handlerListUsers = async ({ token }) => {
             email: element.email,
             companies: companies,
             active: element.active,
+            firstName: element?.firstName,
+            lastName: element?.lastName,
+            mobile: element?.mobile,
+            avatar: getUrl({ avatar: element?.avatar })
         }
         _listUsers.push(user);
     });    

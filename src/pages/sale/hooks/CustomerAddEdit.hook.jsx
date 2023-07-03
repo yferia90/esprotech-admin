@@ -3,7 +3,7 @@ import _ from 'lodash';
 import CustomerHandler from '../handlers/Customer.handler';
 
 const CustomerAddEditHook = ({ token, companyId }) => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [mode, setMode] = useState('card');
 
@@ -91,7 +91,7 @@ const CustomerAddEditHook = ({ token, companyId }) => {
         }, 5000);
     }
 
-    const handlerDelete = async (id) => {
+    const handlerDelete = async ({ id }) => {
         const result = await handlerDeleteCustomer({ id });
         if(result){
             // Se notifica al cliente que el registro fue eliminado
@@ -123,7 +123,7 @@ const CustomerAddEditHook = ({ token, companyId }) => {
         }
     }
 
-    const handlerEdit = async (id) => {
+    const handlerEdit = async ({ id }) => {
         setTitleForm('Editar cliente');
         setShowModal(true);
         setIsCreateForm(false);

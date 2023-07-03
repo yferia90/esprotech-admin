@@ -9,6 +9,7 @@ import CustomerAvatar from './img/customer.png';
 const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, handlerEdit }) => {
   const [fullName, setFullName] = useState('');
   const [mobile, setMobile] = useState('');
+  const [email, setEmail] = useState('');
   const [avatar, setAvatar] = useState(CustomerAvatar);
   const [id, setId] = useState('');
   const [keyCard, setKeyCard] = useState(0);
@@ -17,6 +18,7 @@ const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, hand
       const name = `${data?.firstName} ${data?.lastName}`
       setFullName(name);
       setMobile(data?.mobile);
+      setEmail(data?.email);
       setId(data?.id);
       if(data?.avatar){
         setAvatar(data?.avatar);
@@ -42,7 +44,7 @@ const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, hand
           >
             <MenuItem className="p-0 hover:bg-transparent">
               <div
-                onClick={() => handlerEdit(id)}                
+                onClick={() => handlerEdit({ id })}
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
               >
                 Editar
@@ -50,7 +52,7 @@ const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, hand
             </MenuItem>
             <MenuItem className="p-0 hover:bg-transparent">
               <div
-                onClick={() => handlerDelete(id)}
+                onClick={() => handlerDelete({ id })}
                 className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
               >
                 Eliminar
@@ -64,7 +66,7 @@ const CardCustomer = ({ data, customerKey, color='bg-white', handlerDelete, hand
 			  <img className="shrink-0 h-12 w-12 rounded-full" src={avatar} alt="" />
 			  <div className="ml-5">
 			    <p className="text-sm font-medium text-secondary-900">{fullName}</p>
-			    <p className="text-sm font-medium text-secondary-900">{mobile}</p>
+			    <p className="text-sm font-medium text-secondary-900">{mobile ? mobile : email}</p>
 			  </div>
 			</div>
       </div>

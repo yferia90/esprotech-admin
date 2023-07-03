@@ -5,6 +5,8 @@ const SidebarHook = () => {
     // Módulo de configuracines
     const [classCompany, setClassCompany] = useState(constants.BASE.COMPANY.CLASSNAME.default);
     const [classUser, setClassUser] = useState(constants.BASE.USER.CLASSNAME.default);
+    const [classApplication, setClassApplication] = useState(constants.BASE.APPLICATION.CLASSNAME.default);
+    const [classGroup, setClassGroup] = useState(constants.BASE.GROUP.CLASSNAME.default);
     // Módulo de Ventas
     const [classClient, setClassClient] = useState(constants.SALE.CLIENT.CLASSNAME.default);
     const [classOrderSale, setClassOrderSale] = useState(constants.SALE.ORDER_SALE.CLASSNAME.default);
@@ -27,7 +29,9 @@ const SidebarHook = () => {
         classStore, setClassStore, classMove,
         setClassMove,classExitMove, setClassExitMove,
         classSupplier, setClassSupplier,
-        classOrderPurchase, setClassOrderPurchase
+        classOrderPurchase, setClassOrderPurchase,
+        classApplication, setClassApplication,
+        classGroup, setClassGroup
     }
 }
 

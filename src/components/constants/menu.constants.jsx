@@ -2,7 +2,7 @@ export default {
     BASE: {
         COMPANY: {
             NAME: 'Negocios',
-            PATH: '/admin/company',
+            PATH: '/admin/config/company',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
@@ -10,7 +10,23 @@ export default {
         },
         USER: {
             NAME: 'Usuarios',
-            PATH: '/admin/user',
+            PATH: '/admin/config/user',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
+        },
+        APPLICATION: {
+            NAME: 'Aplicaciones',
+            PATH: '/admin/config/application',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
+        },
+        GROUP: {
+            NAME: 'Permisos',
+            PATH: '/admin/config/group',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'

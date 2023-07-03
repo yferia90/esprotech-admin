@@ -2,8 +2,11 @@ import Env from '../../../../env';
 import { 
     updatePerfilUser,  
     createAddreesUser,
-    updateAddreesUser 
+    updateAddreesUser,
+    deleteAddressUser,
+    allAddressUser
 } from '../../../utils/Api';
+
 import {
     getFile, 
     uploadFile,
@@ -35,22 +38,47 @@ const handlerSubmiProfile = async ({ formData, userId, setUser, token }) => {
     }
 }
 
-const handlerSubmiAddress = async ({ addressId, formData, token, userId, setAddress }) => {
+const handlerSubmiAddress = async ({ addressId, formData, token, userId }) => {
     try {
         let result = (addressId === null 
             ? await createAddreesUser({ formData, token, userId })
             : await updateAddreesUser({ formData, token, addressId }));
-        const newAddress = [];
         const status = result?.data?.status;
-        const address = result?.data?.data?.address;
+        const address = addressId === null  
+            ? result?.data?.data?.user?.address
+            : result?.data?.data?.address;
         if (status === 200) {
-            newAddress.push(address);
-            setAddress(newAddress);
+            return address;
+        }
+        return null
+    } catch (err) {
+        return null;
+    }
+}
+
+const deleteAddress = async ({ token, id }) => {
+    try{
+        const result = await deleteAddressUser({ token, id });
+        const status = result?.data.status;
+        if (status === 200) {
             return true;
         }
+    }catch(e) {
         return false;
-    } catch (err) {
-        return false;
+    }
+}
+
+const allAddressByUser = async ({ token, userId }) => {
+    try{
+        const result = await allAddressUser({ token, userId });
+        const status = result?.data.status;
+        if (status === 200) {
+            const address = result?.data?.data?.address;
+            return address;
+        }
+        return null;
+    }catch(e) {
+        return null;
     }
 }
 
@@ -82,13 +110,15 @@ const changeUserPassword = async ({ token, formData }) => {
     }
 }
 
-const ProfileHandler = ({ setUser, setAddress, token }) => ({
+const ProfileHandler = ({ setUser, token }) => ({
     getUrl: ({ avatar }) => getUrl({ avatar }),
     changeUserEmail: ({ formData, userId, setUser }) => changeUserEmail({ token, formData, userId, setUser }),
     changeUserPassword: ({ formData }) => changeUserPassword({ token, formData}),
     uploadFileProfile: ({ formData }) => uploadFileProfile({ token, formData }),
     handlerSubmiProfile: ({ formData, userId }) => handlerSubmiProfile({ formData, userId, setUser, token }),
-    handlerSubmiAddress: ({ addressId, formData, userId }) => handlerSubmiAddress({ formData, token, userId, addressId, setAddress }),
+    handlerSubmiAddress: ({ addressId, formData, userId }) => handlerSubmiAddress({ formData, token, userId, addressId }),
+    deleteAddress: ({ id }) => deleteAddress({ token, id }),
+    allAddressByUser: ({ userId }) => allAddressByUser({ token, userId }),
 });
 
 export default ProfileHandler;

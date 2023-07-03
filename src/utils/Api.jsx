@@ -11,7 +11,9 @@ const updatePerfilUser = async ({ formData, userId, token }) => {
 }
 
 const createAddreesUser = async ({ formData, token, userId }) => {
-    const result = await axios.post(`${Env.REACT_APP_BACKEND}user/${userId}/address`, { ...formData }, {
+    const result = await axios.post(`${Env.REACT_APP_BACKEND}user/${userId}/address`, { 
+            ...formData 
+        }, {
         headers: {
             Authorization: token
         }
@@ -28,6 +30,23 @@ const updateAddreesUser = async ({ formData, token, addressId }) => {
     return result;
 }
 
+const deleteAddressUser = async ({ token, id }) => {
+    const result = await axios.delete(`${Env.REACT_APP_BACKEND}address/${id}`,{
+        headers: {
+            Authorization: token
+        }
+    });
+    return result;
+}
+
+const allAddressUser = async ({ token, userId }) => {
+    const result = await axios.get(`${Env.REACT_APP_BACKEND}address/user/${userId}`,{
+        headers: {
+            Authorization: token
+        }
+    });
+    return result;
+}
 
 const listCountry = async ({ url, token }) => {
     const result = await axios.get(`${Env.REACT_APP_BACKEND}${url}`, {
@@ -69,6 +88,8 @@ export {
     updatePerfilUser,
     createAddreesUser,
     updateAddreesUser,
+    deleteAddressUser,
+    allAddressUser,
     listCountry,
     listState,
     listMunicipality,

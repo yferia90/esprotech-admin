@@ -207,7 +207,7 @@ const Company = () => {
                                 >
                                     <MenuItem className="p-0 hover:bg-transparent">
                                         <div
-                                            onClick={() => navigate(`/admin/company/detail/${element.id}`)}
+                                            onClick={() => navigate(`/admin/config/company/detail/${element.id}`)}
                                             className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
                                         >
                                             Ver detalles

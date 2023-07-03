@@ -7,29 +7,32 @@ import {
   RiEyeOffLine,
   RiMailLine,
   RiLockLine,
-  RiEyeLine
+  RiEyeLine,
+  RiFilter2Fill,
+  RiHome2Line,
+  RiCodeLine,
+  RiCoinLine,
+  RiFileList2Line,
+  RiSdCardLine
 } from "react-icons/ri";
 import Select from '../../components/Select';
 import UseDataUser from '../auth/hooks/useDataUser';
 import ProfileHandler from './handlers/Profile.handler';
 import SelectHandler from '../../components/handler/Select.handler';
 import ToastForm from '../../components/ToastForm';
-import Modal from '../../components/Modal';
 import CustomModal from '../../components/CustomModal';
+import Address from './Address';
 
 const Profile = () => {
   const {
     email, file, firstName, newMail, setNewMail, setFirstName,
     lastName, setLastName, mobile, setMobile,
-    numFijo, setNumFijo,postalCode, setPostalCode,
+    landline, setNumFijo,postalCode, setPostalCode,
     street, setStreet, countryId, setCountry,
-    stateId, setState, locationId, setLocation,
-    description, setDescription,
+    stateId, setState, setUser, address,
+    description, setDescription, savingAddress,
     dataCountries, setDataCountries,
-    token, dataStates, setDataStates,
-    dataLocation, setDataLocation, setUser,
-    municipalityId, setMunicipality,
-    dataMunicipality, setDataMunicipality,
+    token, dataStates, setDataStates, nroHouse, setNroHouse,
     addressId, setAddress, filePreview, setFilePreview, 
     handlerSubmitDatosPersonales, setTitleModal,
     handlerFileChange, handlerSubmitDatosDireccion,
@@ -40,13 +43,13 @@ const Profile = () => {
     warningChangeEmailPassword, titleChangeEmailPassword, 
     password, setPassword, setNewPassword, newPassword,
     showPassword, setShowPassword, showNewPassword, 
-    setShowNewPassword
+    setShowNewPassword, handlerCancelFormAddress,
+    showModalAddress, setShowModalAddress, titleFormAddress,
+    handlerModalAddress, handlerDeleteAddress, modalUpdateAddress
   } = UseDataUser();
 
   const {
     getCountries, getStatesByCountry,
-    getMunicipalityByState,
-    getLocationByMunicipality
   } = SelectHandler({ token });
 
   useEffect(() => {
@@ -65,7 +68,7 @@ const Profile = () => {
               <input
                 type="email"
                 name="newMail"
-                value={newMail}
+                value={newMail ? newMail : ''}
                 onChange={(evt) => {
                     setNewMail(evt.target.value);
                 }}
@@ -78,7 +81,7 @@ const Profile = () => {
               <input
                 type="email"
                 name="repeatEmail"
-                value={repeatEmail}
+                value={repeatEmail ? repeatEmail : ''}
                 onChange={(evt) => {
                     setRepeatEmail(evt.target.value);
                 }}
@@ -103,7 +106,7 @@ const Profile = () => {
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? "text" : "password"}
-                  value={password}
+                  value={password ? password : ''}
                   className="py-3 px-8 bg-secondary-900 w-full outline-none rounded-lg"
                   placeholder="Contraseña actual"
                   onChange={(event) => {
@@ -127,7 +130,7 @@ const Profile = () => {
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showNewPassword ? "text" : "password"}
-                  value={newPassword}
+                  value={newPassword ? newPassword : ''}
                   className="py-3 px-8 bg-secondary-900 w-full outline-none rounded-lg"
                   placeholder="Nueva contraseña"
                   onChange={(event) => {
@@ -151,6 +154,87 @@ const Profile = () => {
             <hr className="border-gray-500/30" />
           </div>
       </div>
+    )
+  }
+
+  const formNewAddress = () => {
+    return (
+      <div className="rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
+            <div className="md:col-span-4">
+                <hr className="border-gray-500/30 p-2" />
+                <form className="mb-8">                    
+                    <div className="relative mb-4">
+                      <RiCodeLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <input
+                        type="text"
+                        name="postalCode"
+                        value={postalCode ? postalCode : ''}
+                        onChange={(evt) => {
+                            setPostalCode(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Código postal"
+                      />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiHome2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />                      
+                      <input
+                        type="text"
+                        name="street"
+                        value={street ? street : ''}
+                        onChange={(evt) => {
+                            setStreet(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Calle"
+                      />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiHome2Line className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />                      
+                      <input
+                        type="text"
+                        name="nroHouse"
+                        value={nroHouse ? nroHouse : ''}
+                        onChange={(evt) => {
+                            setNroHouse(evt.target.value);
+                        }}
+                        className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                        placeholder="Número de casa o departamento"
+                      />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiCoinLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <Select
+                        initialValue={countryId}
+                        onChangeSelect={(value) => {
+                          setCountry(value);
+                          setState([]);
+                          getStatesByCountry({ setDataStates, countryId: value });
+                        }}
+                        data={dataCountries} />
+                    </div>
+                    <div className="relative mb-4">
+                      <RiCoinLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
+                      <Select
+                        value={stateId}
+                        onChangeSelect={(value) => {
+                          setState(value);
+                        }} data={dataStates} />
+                    </div>
+                    <div className="relative mb-4">
+                    <textarea
+                      value={description ? description : ''}
+                      onChange={(evt) => {
+                        setDescription(evt.target.value);
+                      }}
+                      className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                      placeholder="Deje una descripción"
+                    ></textarea>
+                    </div>
+                </form>
+                <hr className="border-gray-500/30" />
+            </div>
+          </div>    
     )
   }
 
@@ -178,6 +262,14 @@ const Profile = () => {
         cancelModal={() => handlerCancelForm()}
         confirmModal={() => handlerSubmitForm()}
         saving={saving} />
+        {/*Modal para dar de alta una dirección nueva*/}
+      <CustomModal
+          showModal={showModalAddress}
+          title={titleFormAddress}
+          bodyModal={formNewAddress}
+          cancelModal={() => handlerCancelFormAddress()}
+          confirmModal={() => handlerSubmitDatosDireccion()}
+          saving={savingAddress} />
       <Tab.Group>
           <div className="bg-secondary-100 p-8 rounded-bl-lg rounded-br-lg">
               <Tab.List className="flex flex-col md:flex-row md:items-center md:justify-between gap-x-2 gap-y-6 bg-secondary-900/50 py-3 px-4 rounded-lg">
@@ -198,7 +290,7 @@ const Profile = () => {
               <Tab.Panel>
                   <div className="bg-secondary-100 p-8 rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
                       <div className="md:col-span-4">
-                          <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+                          <div className="bg-secondary-100 p-8 rounded-xl">
                           <form>
                             <div className="flex items-center mb-8">
                               <div className="w-1/4">
@@ -206,16 +298,21 @@ const Profile = () => {
                               </div>
                               <div className="flex-1">
                                 <div className="relative mb-2">
-                                  <img
-                                    src={filePreview}
-                                    className="w-28 h-28 object-cover rounded-lg"
-                                  />
+                                {
+                                  filePreview && (
+                                    <img
+                                      src={filePreview}
+                                      className="w-28 h-28 object-cover rounded-lg"
+                                    />
+                                  )
+                                }                                  
                                   <label
                                     htmlFor="avatar"
-                                    className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+                                    className="absolute bg-white p-2 rounded-full hover:cursor-pointer -top-2 left-24"
                                   >
-                                    <RiEdit2Line />
+                                    <RiEdit2Line className="text-secondary-100" />
                                   </label>
+                                  <span className="text-white ml-2">Subir foto</span>
                                   <input                   
                                     type="file"
                                     name="file"
@@ -223,9 +320,9 @@ const Profile = () => {
                                     className="hidden"
                                     onChange={handlerFileChange}/>
                                 </div>
-                                <p className="text-gray-500 text-sm">
+                                {/*<p className="text-gray-500 text-sm">
                                   Se permiten imágenes de tipo: png, jpg, jpeg
-                                </p>
+                                </p>*/}
                               </div>
                             </div>
 
@@ -240,7 +337,7 @@ const Profile = () => {
                                 <div className="w-full">
                                   <input
                                     type="text"
-                                    value={firstName}
+                                    value={firstName ? firstName : ''}
                                     name="firstName"
                                     onChange={(evt) => {
                                       setFirstName(evt.target.value);
@@ -259,7 +356,7 @@ const Profile = () => {
                                 <div className="w-full">
                                   <input
                                     type="text"
-                                    value={lastName}
+                                    value={lastName ? lastName : ''}
                                     onChange={(evt) => {
                                       setLastName(evt.target.value);
                                     }}
@@ -282,7 +379,7 @@ const Profile = () => {
                                   <input
                                     type="text"
                                     name="mobile"
-                                    value={mobile}
+                                    value={mobile ? mobile : ''}
                                     onChange={(evt) => {
                                       setMobile(evt.target.value);
                                     }}
@@ -300,8 +397,8 @@ const Profile = () => {
                                 <div className="w-full">
                                   <input
                                     type="text"
-                                    name="numFijo"
-                                    value={numFijo}
+                                    name="landline"
+                                    value={landline ? landline : ''}
                                     onChange={(evt) => {
                                       setNumFijo(evt.target.value);
                                     }}
@@ -325,171 +422,20 @@ const Profile = () => {
                           </div>
                         </div>                       
                       </div>
-                  </div>                  
+                  </div>
               </Tab.Panel>
               <Tab.Panel>
-                  <div className="bg-secondary-100 p-8 rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
-                      <div className="md:col-span-4">
-                       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-                       {/*<div className="flex justify-end">
-                            <button
-                              onClick={(evt) => {
-                                evt.preventDefault();
-                                handlerSubmitDatosDireccion();
-                              }}
-                              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
-                              Guardar
-                            </button>
-                          </div>*/}
-                          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-                            <div className="w-full md:w-1/4 px-2">
-                              <p>
-                                Código postal
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <input
-                                  type="text"
-                                  name="postalCode"
-                                  value={postalCode}
-                                  onChange={(evt) => {
-                                    setPostalCode(evt.target.value);
-                                  }}
-                                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                                  placeholder="Código postal"
-                                />
-                              </div>
-                            </div>
-                            <div className="w-full md:w-1/4 px-2">
-                              <p>
-                                Calle <span className="text-red-500">*</span>
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <input
-                                  type="text"
-                                  name="street"
-                                  value={street}
-                                  onChange={(evt) => {
-                                    setStreet(evt.target.value);
-                                  }}
-                                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                                  placeholder="Calle"
-                                />
-                              </div>
-                            </div>
-                          </div>
-
-
-                          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-                            <div className="w-full md:w-1/4 px-2">
-                              <p>
-                                País <span className="text-red-500">*</span>
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <Select
-                                  initialValue={countryId}
-                                  onChangeSelect={(value) => {
-                                    setCountry(value);
-                                    setState([]);
-                                    getStatesByCountry({ setDataStates, countryId: value });
-                                  }}
-                                  data={dataCountries} />
-                              </div>
-                            </div>
-                            <div className="w-full md:w-1/4 px-2">
-                              <p>
-                                Provincia <span className="text-red-500">*</span>
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <Select
-                                  value={stateId}
-                                  onChangeSelect={(value) => {
-                                    setState(value);
-                                    setMunicipality([]);
-                                    getMunicipalityByState({ setDataMunicipality, stateId: value })
-                                  }} data={dataStates} />
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="flex flex-col gap-y-2 md:flex-row md:items-center mb-8">
-                            <div className="w-full md:w-1/4">
-                              <p>
-                                Municipio
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <Select
-                                  value={municipalityId}
-                                  onChangeSelect={(value) => {
-                                    setMunicipality(value);
-                                    setLocation([]);
-                                    getLocationByMunicipality({ setDataLocation, municipalityId: value });
-                                  }}
-                                  data={dataMunicipality} />
-                              </div>
-                            </div>
-                            <div className="w-full md:w-1/4 px-2">
-                              <p>
-                                Localidad
-                              </p>
-                            </div>
-                            <div className="flex-1 flex items-center gap-4">
-                              <div className="w-full">
-                                <Select
-                                  value={locationId}
-                                  onChangeSelect={(value) => {
-                                    setLocation(value);
-                                  }} data={dataLocation} />
-                              </div>
-                            </div>
-                          </div>
-                          <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-                            <div className="w-full md:w-1/4">
-                              <p>
-                                Descripción
-                              </p>
-                            </div>
-                            <div className="flex-1">
-                              <textarea
-                                value={description}
-                                onChange={(evt) => {
-                                  setDescription(evt.target.value);
-                                }}
-                                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                                placeholder="Deje una descripción"
-                              ></textarea>
-                            </div>
-                          </div>
-                          <hr className="my-8 border-gray-500/30" />
-                          <div className="flex justify-end">
-                            <button
-                              onClick={(evt) => {
-                                evt.preventDefault();
-                                handlerSubmitDatosDireccion();
-                              }}
-                              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
-                              Guardar
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                  </div>
+                <Address 
+                  address={address} 
+                  handlerModalAddress={handlerModalAddress}
+                  modalUpdateAddress={modalUpdateAddress}
+                  handlerDeleteAddress={handlerDeleteAddress} />
               </Tab.Panel>
               <Tab.Panel>
                   <div className="bg-secondary-100 p-8 rounded-lg grid grid-cols-1 xl:grid-cols-4 gap-8">
                       <div className="md:col-span-4">
                          {/* Correo y contraseña */}
-                          <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-                            <div className="mb-8">
+                          <div className="bg-secondary-100 p-8 rounded-xl">
                               <div className="flex flex-col md:flex-row md:items-center gap-y-4 justify-between">
                                 <div>
                                   <h5 className="text-gray-100 text-xl mb-1">Correo electrónico</h5>
@@ -524,8 +470,7 @@ const Profile = () => {
                                     Cambiar contraseña
                                   </button>
                                 </div>
-                              </div>                 
-                          </div>
+                              </div>
                         </div>
                       </div>
                   </div>

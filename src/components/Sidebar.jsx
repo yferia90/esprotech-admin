@@ -32,7 +32,9 @@ const Sidebar = () => {
     classStore, setClassStore, classMove, setClassMove,
     classExitMove, setClassExitMove,
     classSupplier, setClassSupplier,
-    classOrderPurchase, setClassOrderPurchase
+    classOrderPurchase, setClassOrderPurchase,
+    classApplication, setClassApplication,
+    classGroup, setClassGroup
   } = SidebarHook();
 
   return (
@@ -150,7 +152,7 @@ const Sidebar = () => {
                 />
               </button>
               <ul
-                className={` ${showMenuStock ? "h-[225px]" : "h-0"
+                className={` ${showMenuStock ? "h-[205px]" : "h-0"
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -225,7 +227,7 @@ const Sidebar = () => {
                 />
               </button>
               <ul
-                className={` ${showMenuConfig ? "h-[80px]" : "h-0"
+                className={` ${showMenuConfig ? "h-[158px]" : "h-0"
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -248,6 +250,28 @@ const Sidebar = () => {
                     className={classUser}
                   >
                     {constants.BASE.USER.NAME}
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      setClassApplication(constants.BASE.APPLICATION.CLASSNAME.pointer);
+                      navigate(`${constants.BASE.APPLICATION.PATH}`);
+                    }}
+                    className={classApplication}
+                  >
+                    {constants.BASE.APPLICATION.NAME}
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      setClassGroup(constants.BASE.GROUP.CLASSNAME.pointer);
+                      navigate(`${constants.BASE.GROUP.PATH}`);
+                    }}
+                    className={classGroup}
+                  >
+                    {constants.BASE.GROUP.NAME}
                   </div>
                 </li>
               </ul>

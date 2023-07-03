@@ -11,6 +11,8 @@ import CompanyDetail from './pages/base/CompanyDetail';
 import Error404 from "./pages/Error404";
 import Tickets from "./pages/admin/Tickets";
 import User from './pages/base/User';
+import Application from './pages/base/Application';
+import Permission from './pages/base/Permission';
 import Customer from './pages/sale/Customer';
 import OrderSale from './pages/sale/OrderSale';
 import Category from './pages/stock/Category';
@@ -31,10 +33,12 @@ const App = () => {
         <Route path="/admin" element={<LayoutAdmin />}>
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="company" element={<Company />} />
-          <Route path="company/detail/:id" element={<CompanyDetail />} />
-          <Route path="user" element={<User />} />
-          <Route path="user/edit/:id" element={<EditUser />} />
+          <Route path="config/company" element={<Company />} />
+          <Route path="config/company/detail/:id" element={<CompanyDetail />} />
+          <Route path="config/user" element={<User />} />
+          <Route path="config/user/edit/:id" element={<EditUser />} />
+          <Route path="config/application" element={<Application />} />
+          <Route path="config/group" element={<Permission />} />
           <Route path="sale/customer" element={<Customer />} />
           <Route path="sale/sale" element={<OrderSale />} />
           <Route path="stock/category" element={<Category />} />

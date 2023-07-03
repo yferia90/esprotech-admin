@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 const Select = ({ onChangeSelect, data = [], initialValue = null }) => {
     const [initComponent, setInitComponent] = useState(true);
-    const [defaultValue, setDefaultValue] = useState(initialValue);
+    const [defaultValue, setDefaultValue] = useState('');
 
     useEffect(() => {
         if (data.length > 0) {
@@ -16,13 +16,17 @@ const Select = ({ onChangeSelect, data = [], initialValue = null }) => {
         }
     }, [data]);
 
+    useEffect(() => {
+        setDefaultValue(initialValue);
+    }, [initialValue]);
+
     return (
         <select
             onChange={(evt) => {
                 const value = evt.target.value;
                 onChangeSelect(value);
             }}
-            className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none">
+            className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none pl-8">
             {
                 data && data.length > 0 && initialValue!== null && (
                     <option value={defaultValue.value}>{defaultValue.label}</option>

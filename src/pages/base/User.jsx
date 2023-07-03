@@ -12,7 +12,9 @@ import {
     RiEyeLine,
     RiHome2Line,
     RiCodeLine,
-    RiCoinLine
+    RiCoinLine,
+    RiFileList2Line,
+    RiSdCardLine
 } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
@@ -22,6 +24,8 @@ import UserHook from './hooks/User.hook';
 import UserEditHook from './hooks/UserEdit.hook';
 import ToastForm from '../../components/ToastForm';
 import CustomModal from '../../components/CustomModal';
+import CardCustomer from '../../components/CardCustomer';
+import Tooltip from '../../components/Tooltip';
 
 const User = () => {
     const navigate = useNavigate();
@@ -31,7 +35,7 @@ const User = () => {
         titleForm, showModal, saving,
         handlerCancelForm, handlerSubmitForm,
         errorSubmit, warningForm, addForm,
-        messageError, messageSuccess,
+        messageError, messageSuccess, mode, setMode,
         handlerClickShowModal, firstName, setFirstName,
         lastName, setLastName, email, setEmail,
         password, setPassword, showPassword, setShowPassword,
@@ -47,16 +51,21 @@ const FormUser = () => {
                 <form className="mb-8">
                     <div className="flex items-center mb-8">
                       <div className="relative mb-4">
-                          <img
-                            src={filePreview}
-                            className="w-28 h-28 object-cover rounded-lg"
-                          />
+                          {
+                            filePreview && (
+                                <img
+                                    src={filePreview}
+                                    className="w-28 h-28 object-cover rounded-lg"
+                                  />
+                            )
+                          }
                           <label
                             htmlFor="avatar"
                             className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
                           >
                             <RiEdit2Line />
                           </label>
+                          <span className="text-secondary-100 ml-2">Subir foto</span>
                           <input                   
                             type="file"
                             name="file"
@@ -149,47 +158,33 @@ const FormUser = () => {
         )
     }
 
-    return (
-        <div>
-            {
-                errorSubmit && (
-                    <ToastForm title={messageError} type="error" />
-                )
-            }
-            {
-                warningForm && (
-                    <ToastForm title="Hay campos requeridos sin completar" type="warning" />
-                )
-            }
-            {
-                addForm && (
-                    <ToastForm title={messageSuccess} type="success" />
-                )
-            }
-            <CustomModal
-                showModal={showModal}
-                title={titleForm}
-                bodyModal={FormUser}
-                cancelModal={() => handlerCancelForm()}
-                confirmModal={() => handlerSubmitForm()}
-                saving={saving}
-            />
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 mb-10 bg-secondary-100 p-8 rounded-xl">
-                <div>
-                    <h1 className="font-bold text-gray-100 text-xl">Listado de usuarios</h1>
-                </div>
-                <div className="flex items-center gap-4">
-                    <button className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
-                        <RiFilter2Fill /> Filter
-                    </button>
-                    <button 
-                        onClick={() => handlerClickShowModal({ addDetail: false})}
-                        className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors">
-                        Crear usuario
-                    </button>
-                </div>
+    const CardView = () => {
+        return (
+             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                {loading && (
+                    <div role="status" className="flex items-center justify-center">
+                        <svg aria-hidden="true" className="w-8 h-8 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor" /><path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill" /></svg>
+                    </div>
+                )}
+                {
+                    users && users.map((element, index) => (
+                        <CardCustomer 
+                            key={element?.id}
+                            color="bg-third" 
+                            data={element}
+                            customerKey={index} 
+                            handlerEdit={(id) => navigate(`/admin/config/user/edit/${id}`)}
+                            handlerDelete={(id) => navigate(`/admin/config/user/edit/${id}`)}
+                        />
+                    ))
+                }
             </div>
-            <div className="bg-secondary-100 p-8 rounded-xl">
+        );
+    }
+
+    const ListView = () => {
+        return (
+            <>
                 <div className="hidden md:grid grid-cols-1 md:grid-cols-5 gap-4 mb-10 p-4">
                     <h5>Nombre</h5>
                     <h5>Email</h5>
@@ -238,7 +233,7 @@ const FormUser = () => {
                             >
                                 <MenuItem className="p-0 hover:bg-transparent">
                                     <div
-                                        onClick={() => navigate(`/admin/user/edit/${element.id}`)}
+                                        onClick={() => navigate(`/admin/config/user/edit/${element.id}`)}
                                         className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
                                     >
                                         Ver detalles
@@ -246,7 +241,7 @@ const FormUser = () => {
                                 </MenuItem>
                                 <MenuItem className="p-0 hover:bg-transparent">
                                     <div
-                                        onClick={() => navigate(`/admin/user/edit/${element.id}`)}
+                                        onClick={() => navigate(`/admin/config/user/edit/${element.id}`)}
                                         className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
                                     >
                                         Editar
@@ -275,6 +270,69 @@ const FormUser = () => {
                             </nav>
                         </div>
                     )
+                }
+            </>
+        )
+    }
+
+    return (
+        <div>
+            {
+                errorSubmit && (
+                    <ToastForm title={messageError} type="error" />
+                )
+            }
+            {
+                warningForm && (
+                    <ToastForm title="Hay campos requeridos sin completar" type="warning" />
+                )
+            }
+            {
+                addForm && (
+                    <ToastForm title={messageSuccess} type="success" />
+                )
+            }
+            <CustomModal
+                showModal={showModal}
+                title={titleForm}
+                bodyModal={FormUser}
+                cancelModal={() => handlerCancelForm()}
+                confirmModal={() => handlerSubmitForm()}
+                saving={saving}
+            />
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-y-4 mb-10 bg-secondary-100 p-8 rounded-xl">
+                <div>
+                    <h1 className="font-bold text-gray-100 text-xl">Listado de usuarios</h1>
+                </div>
+                <div className="flex items-center gap-4">
+                    {users && users.length > 0 && (
+                        <Tooltip text="Vista en modo card">
+                            <button
+                                onClick={() => setMode('card')}
+                                className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 rounded-lg hover:text-primary transition-colors">
+                                    <RiSdCardLine className="w-8 h-8" />
+                            </button>
+                        </Tooltip>
+                    )}
+                    {users && users.length > 0 && (
+                        <Tooltip text="Vista en modo listado">
+                            <button 
+                                onClick={() => setMode('list')}
+                                className="bg-secondary-100/50 hover:bg-secondary-100 flex items-center gap-2 py-2 px-4 rounded-lg hover:text-primary transition-colors">
+                                    <RiFileList2Line className="w-8 h-8" />
+                            </button>
+                        </Tooltip>
+                    )}
+                    <button 
+                        onClick={() => handlerClickShowModal({ addDetail: false})}
+                        className="bg-primary/90 text-black hover:bg-primary flex items-center gap-2 py-2 px-4 rounded-lg transition-colors">
+                        Nuevo usuario
+                    </button>
+                </div>
+            </div>
+            <div className="bg-secondary-100 p-8 rounded-xl">
+                 {
+                    mode === 'card' ? CardView() : ListView()
                 }
             </div>
         </div>

@@ -1,44 +1,55 @@
 import { useState, useEffect } from 'react';
+import _ from 'lodash';
+
 import { useAppContext } from '../../../contexts/App.context';
 
 import ProfileHandler from '../../admin/handlers/Profile.handler';
 
 const UseDataUser = () => {
     const [userId, setUserId] = useState('');
+    const [avatar, setAvatar] = useState('');
+    const [filePreview, setFilePreview] = useState('');
     const [fullName, setFullName] = useState('');
     const [password, setPassword] = useState('');
     const [newPassword, setNewPassword] = useState();
     const [firstName, setFirstName] = useState('');
-    const [mobile, setMobile] = useState('');
     const [lastName, setLastName] = useState('');
+    const [mobile, setMobile] = useState('');
+    const [landline, setNumFijo] = useState('');    
     const [email, setEmail] = useState('');
     const [newMail, setNewMail] = useState('');
     const [repeatEmail, setRepeatEmail] = useState('');
     const [companies, setCompanies] = useState([]);
     const [messageError, setMessageError] = useState('');
     const [messageSuccess, setMessageSuccess] = useState('');
-    const [numFijo, setNumFijo] = useState('');
+
+
     const [postalCode, setPostalCode] = useState('');
+    const [nroHouse, setNroHouse] = useState('');
     const [street, setStreet] = useState('');
     const [countryId, setCountry] = useState('');
     const [stateId, setState] = useState('');
-    const [municipalityId, setMunicipality] = useState('');
-    const [locationId, setLocation] = useState('');
+    const [address, setAddress] = useState([]);
+    const [addressId, setAddressId] = useState(null);
     const [description, setDescription] = useState('');
+    const [addAddres, setAddAddress] = useState(true);
+    const [searchAllAddress, setSearchAllAddress] = useState(false);
+
     const [dataCountries, setDataCountries] = useState([]);
     const [dataStates, setDataStates] = useState([]);
-    const [dataMunicipality, setDataMunicipality] = useState([]);
-    const [dataLocation, setDataLocation] = useState([]);
-    const [address, setAddress] = useState({});
-    const [addressId, setAddressId] = useState(null);
     const [TbUserId, setTbUserId] = useState(null);
-    const [avatar, setAvatar] = useState('');
-    const [filePreview, setFilePreview] = useState('');
+
     const [errorUploadFile, setErrorUploadFile] = useState(false);
     const [addPersonalData, setPersonalData] = useState(false);
     const [showModal, setShowModal] = useState(false);
     const [titleModal, setTitleModal] = useState('');
-    const [saving, setSaving] = useState(false);    
+    const [saving, setSaving] = useState(false);
+
+    // Estados de la modal para insertar y actualizar direcciones
+    const [showModalAddress, setShowModalAddress] = useState(false);
+    const [titleFormAddress, setTitleFormAddress] = useState('');
+    const [savingAddress, setSavingAddress] = useState(false);
+
     const [changeEmail, setChangeEmail] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
@@ -50,13 +61,15 @@ const UseDataUser = () => {
         handlerSubmiProfile, 
         uploadFileProfile, 
         handlerSubmiAddress,
+        allAddressByUser,
         getUrl,
         changeUserEmail,
-        changeUserPassword
+        changeUserPassword,
+        deleteAddress
     } = ProfileHandler({ setUser, setAddress, token });
 
     useEffect(() => {
-        const { avatar, firstName, lastName, email, mobile, id, companies } = user;
+        const { avatar, firstName, lastName, email, mobile, landline, id, companies } = user;
         let address = user?.address || [];
         const fullName = `${firstName} ${lastName}`;
         setAddress(address);
@@ -67,39 +80,49 @@ const UseDataUser = () => {
         setFullName(fullName);
         setMobile(mobile);
         setAvatar(avatar);
+        setNumFijo(landline);
         if(avatar)setFilePreview(getUrl({ avatar }));
         setCompanies(companies);
     }, [user]);
 
-    useEffect(() => {
-        let fullAddress = Object.keys(address).length > 0 ? address[0]?.fullAddress : {};
-        const postalCode = address[0]?.postalCode || '';
-        const tbUserId = address[0]?.TbUserId || null;
-        const addreesId = address[0]?.id || null;
-        const description = address[0]?.description || '';
-        setPostalCode(postalCode);
-        setDescription(description);
-        setTbUserId(tbUserId);
-        setAddressId(addreesId);
 
-        if (fullAddress !== undefined && fullAddress.length > 0) {
-            fullAddress = JSON.parse(fullAddress);
-            const street = fullAddress?.street || '';
-            const countryId = fullAddress?.countryId || '';
-            const stateId = fullAddress?.stateId || '';
-            const municipalityId = fullAddress?.municipalityId || '';
-            const locationId = fullAddress?.locationId || '';
-            setCountry(countryId);
-            setState(stateId);
-            setMunicipality(municipalityId);
-            setLocation(locationId);
-            setStreet(street);
+    const searchAllAddresByUser = async () => {
+        const allAddress = await allAddressByUser({ userId });
+        if(!_.isNil(allAddress)){
+            console.log("All Address", allAddress);
+            setAddress(allAddress);
+            setSearchAllAddress(false);
         }
-    }, [address]);
+    }
+
+    useEffect(() => {
+        if(searchAllAddress){
+            searchAllAddresByUser();
+        }
+    },[searchAllAddress]);
 
     const handlerCancelForm = () => {
         setChangeEmail(false);
         setShowModal(false);
+    }
+
+    const handlerModalAddress = () => {
+        setTitleFormAddress('Nueva dirección');
+        setShowModalAddress(true);
+    }
+
+    const clearFieldsAddress = () => {
+        setPostalCode('');
+        setStreet('');
+        setCountry('');
+        setState('');
+        setDescription('');
+        setNroHouse('');
+    }
+
+    const handlerCancelFormAddress = () => {
+        setShowModalAddress(false);
+        clearFieldsAddress();
     }
 
     const handlerMessageError = () => {
@@ -133,10 +156,11 @@ const UseDataUser = () => {
     }
 
     const handlerSubmitDatosPersonales = async () => {
-        const formData = { avatar, firstName, lastName, mobile, numFijo };
+        const formData = { avatar, firstName, lastName, mobile, landline };
         const result = await handlerSubmiProfile({ userId, formData });
         if(result){
-            setMessageSuccess("Sus datos personaes fueron actualizados correctamente");
+            setSearchAllAddress(true);
+            setMessageSuccess("Sus datos personales fueron actualizados correctamente");
             handlerMessageSuccess();
         }else{
             setMessageError("Ups, ocurrió un problema guardando sus datos personales");
@@ -144,19 +168,63 @@ const UseDataUser = () => {
         }
     }
 
+    const findAndGetAddres = (id) => {
+        const findAddress = address.filter(item => item.id === id);
+        setPostalCode(findAddress[0]?.postalCode || '');
+        setStreet(findAddress[0]?.street || '');
+        setNroHouse(findAddress[0]?.nroHouse || '');
+        setCountry(findAddress[0]?.countryId || '');
+        setState(findAddress[0]?.stateId || '');
+        setDescription(findAddress[0]?.description || ''); 
+        setAddressId(findAddress[0]?.id || '')
+    }
+
+    const modalUpdateAddress = (id) => {
+        setTitleFormAddress('Editar dirección');
+        setShowModalAddress(true);
+        findAndGetAddres(id);
+    }
+
     const handlerSubmitDatosDireccion = async () => {
-        const formData = {
-            postalCode,
-            description,
-            fullAddress: JSON.stringify({ street, countryId, stateId, municipalityId, locationId })
-        };
-        const result = await handlerSubmiAddress({ userId, addressId, formData });
-        if(result){
-            setMessageSuccess("La dirección fue actualizada correctamente");
-            handlerMessageSuccess();
-        }else{
-            setMessageError("Ups, ocurrió un problema actualizando la dirección");
+        try{
+            const formData = {
+                postalCode,
+                nroHouse,
+                street,
+                description,
+                countryId,
+                stateId,
+            };
+            const result = await handlerSubmiAddress({ userId, addressId, formData });
+            if (_.isUndefined(result) || _.isEmpty(result)) {
+                setMessageError(`Ups, ocurrió un problema ${addressId === null ? 'creando' : 'actualizando'} la dirección`);
+                handlerMessageError();
+            }else{
+                if(addressId === null){
+                    setAddress(result);
+                }else {
+                    setAddressId(null);
+                    setSearchAllAddress(true);
+                }                
+                handlerCancelFormAddress();
+                setMessageSuccess(`La dirección fue ${addressId === null ? 'creada' : 'actualizada'} correctamente`);
+                handlerMessageSuccess();
+            }
+        }catch(e) {
+            console.log("ERROR!!!",e);
+        }        
+    }
+
+    const handlerDeleteAddress = async (id) => {
+        const result = await deleteAddress({ id });
+        if (result) {
+            setSearchAllAddress(true);
+            setMessageSuccess(`La dirección fue eliminada correctamente`);
+            handlerMessageSuccess();            
+        }else {
+            setMessageError(`Ups, ocurrió un problema eliminando la dirección`);
             handlerMessageError();
+
         }
     }
 
@@ -216,25 +284,24 @@ const UseDataUser = () => {
     return {
         userId, fullName, email, newMail, setNewMail, filePreview, 
         setFilePreview, firstName, setFirstName, lastName,
-        setLastName, mobile, setMobile, numFijo,
+        setLastName, mobile, setMobile, landline,
         setNumFijo, postalCode, setPostalCode,
-        street, setStreet, countryId, setCountry,
-        stateId, setState,locationId, setLocation,
-        description, setDescription, dataCountries, setDataCountries, token,
-        dataStates, setDataStates,dataLocation, setDataLocation, setUser,
-        municipalityId, setMunicipality,
-        dataMunicipality, setDataMunicipality,
+        street, setStreet, countryId, setCountry, nroHouse, setNroHouse,
+        stateId, setState, description, setDescription, dataCountries,
+        setDataCountries, token,dataStates, setDataStates, setUser,
         TbUserId, setTbUserId, addressId, setAddressId, setShowModal,
-        setAddress, companies, setCompanies,
+        setAddress, companies, setCompanies, address,
         handlerSubmitDatosPersonales, setTitleModal,
         handlerFileChange, handlerSubmitDatosDireccion,
         errorUploadFile, messageError, messageSuccess,
         addPersonalData, showModal, titleModal, saving,
         handlerCancelForm, handlerSubmitForm, setChangeEmail, changeEmail,
         repeatEmail, setRepeatEmail, warningChangeEmailPassword,
-        titleChangeEmailPassword, password, setPassword, 
+        titleChangeEmailPassword, password, setPassword, savingAddress,
         setNewPassword, newPassword, showPassword, setShowPassword,
-        showNewPassword, setShowNewPassword
+        showNewPassword, setShowNewPassword, handlerCancelFormAddress,
+        showModalAddress, setShowModalAddress, titleFormAddress, setTitleFormAddress,
+        handlerModalAddress, handlerDeleteAddress, modalUpdateAddress
     }
 }
 
