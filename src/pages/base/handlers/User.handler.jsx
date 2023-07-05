@@ -1,3 +1,4 @@
+import _ from "lodash";
 import Env from '../../../../env';
 import { 
     getUsers, 
@@ -14,21 +15,23 @@ const handlerListUsers = async ({ token }) => {
     const users = await getUsers({ token });
     const listUsers = users?.users;
     let _listUsers = [];
-    listUsers.forEach(element => {
-        const companies = element.companies.reduce((companies,company) =>  `${companies}, ${company?.name}`,"");
-        const user = {
-            id: element.id,
-            fullName: `${element.firstName} ${element.lastName}`,
-            email: element.email,
-            companies: companies,
-            active: element.active,
-            firstName: element?.firstName,
-            lastName: element?.lastName,
-            mobile: element?.mobile,
-            avatar: getUrl({ avatar: element?.avatar })
-        }
-        _listUsers.push(user);
-    });    
+    if(!_.isNil(listUsers)){
+        listUsers.forEach(element => {
+            const companies = element.companies.reduce((companies,company) =>  `${companies}, ${company?.name}`,"");
+            const user = {
+                id: element.id,
+                fullName: `${element.firstName} ${element.lastName}`,
+                email: element.email,
+                companies: companies,
+                active: element.active,
+                firstName: element?.firstName,
+                lastName: element?.lastName,
+                mobile: element?.mobile,
+                avatar: getUrl({ avatar: element?.avatar })
+            }
+            _listUsers.push(user);
+        });
+    }
     return _listUsers;
 }
 

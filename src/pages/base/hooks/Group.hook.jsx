@@ -1,55 +1,55 @@
 import { useState, useEffect } from 'react';
 import _ from "lodash";
 
-import ApplicationHandler from '../handlers/Application.handler';
+import GroupHandler from '../handlers/Group.handler';
 
-const ApplicationHook = ({ token }) => {
+const GroupHook = ({ token }) => {
 	// Carga inicial de la pantalla
-	const [applications, setApplications] = useState([]);
+	const [groups, setGroups] = useState([]);
 	const [loading, setLoading] = useState(true);
-	const [isLoadingApplications, setIsLoadingApplications] = useState(false);
+	const [isLoadingGroups, setIsLoadingGroups] = useState(false);
 	// Mensajes al cliente
 	const [isError, setIsError] = useState(false);
 	const [isWarning, setIsWarning] = useState(false);
 	const [isSuccess, setIsSuccess] = useState(false);
 	const [messageError, setMessageError] = useState('');
 	const [messageSuccess, setMessageSuccess] = useState('');
-	// Estados de la modal de alta y edición de aplicaciones
+	// Estados de la modal de alta y edición del grupo
 	const [showModal, setShowModal] = useState(false);
 	const [titleModal, setTitleModal] = useState('');
 	const [saving, setSaving] = useState(false);
-	// Estados del formulario de aplicaciones
+	// Estados del formulario de grupo
 	const [code, setCode] = useState('');
 	const [name, setName] = useState('');
 	const [isFormEdit, setIsFormEdit] = useState(false);
 	const [idEdit, setIdEdit] = useState(null);
 
 	const { 
-		handlerListApplications,
-		handlerDeleteApplication,
-		handlerPostApplication,
-		handlerUpdateApplication,
-		handlerGetApplicationById } = ApplicationHandler({ token });
+		handlerListGroup,
+		handlerDeleteGroup,
+		handlerPostGroup,
+		handlerUpdateGroup,
+		handlerGetGroupById } = GroupHandler({ token });
 
-	const searchListApplications = async () => {
-		const allApplications = await handlerListApplications();
-		if(!_.isNil(allApplications)){
-			setApplications(allApplications);
+	const searchListGroups = async () => {
+		const allGroups = await handlerListGroup();
+		if(!_.isNil(allGroups)){
+			setGroups(allGroups);
 			setLoading(false);
-			setIsLoadingApplications(false);
+			setIsLoadingGroups(false);
 		}
 	}
 
 	useEffect(() => {
-		document.title = 'Listado de aplicaciones';
-        searchListApplications();
+		document.title = 'Listado de grupos de permisos';
+        searchListGroups();
 	},[]);
 
 	useEffect(() => {
-		if(isLoadingApplications){
-			searchListApplications();
+		if(isLoadingGroups){
+			searchListGroups();
 		}
-	},[isLoadingApplications]);
+	},[isLoadingGroups]);
 
 
 	const clearFields = () => {
@@ -72,26 +72,26 @@ const ApplicationHook = ({ token }) => {
 		},5000);	
 	}
 
-	const getAndSetDataApplication = async ({ id }) => {
-        const application = await handlerGetApplicationById({ id });
-        setName(application?.name || '');
-        setCode(application?.code || '');
+	const getAndSetData = async ({ id }) => {
+        const group = await handlerGetGroupById({ id });
+        setName(group?.name || '');
+        setCode(group?.code || '');
         setIdEdit(id);
     }
 
-	const handlerEditApplication = (id) => {
+	const handlerEdit = (id) => {
 		setIsFormEdit(true);
 		setShowModal(true);
-		setTitleModal('Editar aplicación');
-		getAndSetDataApplication({ id });
+		setTitleModal('Editar permiso');
+		getAndSetData({ id });
 	}
 
-	const deleteApplicationById = async (id) => {
+	const deleteById = async (id) => {
 		try{
-			const status = await handlerDeleteApplication({ id });
+			const status = await handlerDeleteGroup({ id });
 			if (status === 200){
-				setIsLoadingApplications(true);
-				setMessageSuccess('La aplicación fue eliminada correctamente');
+				setIsLoadingGroups(true) 
+				setMessageSuccess('El permiso fue eliminado correctamente');
 				handlerSuccess();
 			}else {
 				setMessageError('Ups, algo salió mal. Inténtelo más tarde')
@@ -105,7 +105,7 @@ const ApplicationHook = ({ token }) => {
 
 	const handlerShowModal = () => {
 		setShowModal(true);
-		setTitleModal('Adicionar aplicación')
+		setTitleModal('Adicionar permiso')
 	}
 
 	const handlerCancelForm = () => {
@@ -116,12 +116,12 @@ const ApplicationHook = ({ token }) => {
 	const handlerSubmitForm = async () => {
 		const formData = { code, name };
 		const result = (idEdit === null 
-			? await handlerPostApplication({ formData })
-			: await handlerUpdateApplication({ formData, id: idEdit }));
+			? await handlerPostGroup({ formData })
+			: await handlerUpdateGroup({ formData, id: idEdit }));
 		if(!_.isNil(result)){
 			setShowModal(false);
-			setIsLoadingApplications(true);
-			setMessageSuccess(`La aplicación fue ${idEdit === null ? 'creada' : 'actualizada'} correctamente`);
+			setIsLoadingGroups(true);
+			setMessageSuccess(`El permiso fue ${idEdit === null ? 'creado' : 'actualizado'} correctamente`);
 			if(idEdit !== null) setIdEdit(null);
 			handlerSuccess();
 		}else {
@@ -131,12 +131,12 @@ const ApplicationHook = ({ token }) => {
 	}
 
 	return {
-		applications, loading, deleteApplicationById,
+		groups, loading, deleteById,
 		isError, isWarning, isSuccess, messageError,
 		messageSuccess, showModal, titleModal, handlerCancelForm,
 		handlerSubmitForm, saving, handlerShowModal,
-		code, name, setCode, setName, handlerEditApplication
+		code, name, setCode, setName, handlerEdit
 	}
 }
 
-export default ApplicationHook;
+export default GroupHook;

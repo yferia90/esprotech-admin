@@ -2,23 +2,25 @@ import { useState, useEffect } from 'react';
 import _ from 'lodash';
 import CustomerHandler from '../handlers/Customer.handler';
 
-const CustomerAddEditHook = ({ token, companyId }) => {
+const CustomerHook = ({ token, companyId }) => {
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
-    const [mode, setMode] = useState('card');
-
+    const [mode, setMode] = useState('list');
+    // Estados del los campos del formulario
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [mobile, setMobile] = useState('');
     const [avatar, setAvatar] = useState('');
     const [filePreview, setFilePreview] = useState(null);
-    const [errorUploadFile, setErrorUploadFile] = useState(false);
     const [isClient] = useState(true);
+    // Estados del formulario de la modal
+    const [errorUploadFile, setErrorUploadFile] = useState(false);    
     const [editCustomer, setIdEditCustomer] = useState('');
     const [titleForm, setTitleForm] = useState('');
     const [showModal, setShowModal] = useState(false);
     const [saving, setSaving] = useState(false);
+    // Control de mensajes al usuario
     const [errorSubmit, setErrorAddForm] = useState(false);
     const [warningForm, setWarningForm] = useState(false);
     const [messageError, setMessageError] = useState('');
@@ -186,4 +188,4 @@ const CustomerAddEditHook = ({ token, companyId }) => {
     }
 }
 
-export default CustomerAddEditHook;
+export default CustomerHook;

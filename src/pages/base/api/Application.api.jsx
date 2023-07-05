@@ -10,6 +10,15 @@ const getApplications = async ({ token }) => {
     return result?.data?.data;
 }
 
+const getApplication = async ({ token, id }) => {
+    const result = await axios.get(`${Env.REACT_APP_BACKEND}/application/${id}`, {
+        headers: {
+            Authorization: token
+        }
+    });
+    return result?.data?.data;
+}
+
 const deleteApplication = async ({ token, id }) => {
     const result = await axios.delete(`${Env.REACT_APP_BACKEND}application/${id}`,{
         headers: {
@@ -30,8 +39,22 @@ const postApplication = async ({ token, formData }) => {
     return result?.data?.data;
 }
 
+const updateApplication = async ({ token, formData, id }) => {
+    const result = await axios.put(`${Env.REACT_APP_BACKEND}application/${id}`,{
+        ...formData
+    },{
+        headers: {
+            Authorization: token
+        }
+    });
+    return result?.data?.data;
+}
+
+
 export {
+    getApplication,    
     getApplications,
     deleteApplication,
-    postApplication
+    postApplication,
+    updateApplication
 }

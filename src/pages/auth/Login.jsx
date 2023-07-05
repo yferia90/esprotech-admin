@@ -7,7 +7,7 @@ import {
   RiEyeOffLine,
 } from "react-icons/ri";
 import LoginHook from './hooks/Login.hook';
-import LoginHandler from './handler/login.handler';
+import LoginHandler from './handler/Login.handler';
 import useAppContext from '../../contexts/App.context';
 import AlertError from "../../components/AlertError";
 
