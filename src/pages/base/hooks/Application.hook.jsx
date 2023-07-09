@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import _ from "lodash";
 
 import ApplicationHandler from '../handlers/Application.handler';
+import { range } from '../../../utils/utils';
 
 const ApplicationHook = ({ token }) => {
 	// Carga inicial de la pantalla
@@ -23,6 +24,13 @@ const ApplicationHook = ({ token }) => {
 	const [name, setName] = useState('');
 	const [isFormEdit, setIsFormEdit] = useState(false);
 	const [idEdit, setIdEdit] = useState(null);
+	// Estados del paginado
+	const [page, setPage] = useState(0);
+	const [size, setSize] = useState(10);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalItems, setTotalItems] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+	const [rangePaginator, setRangePaginator] = useState([]);
 
 	const { 
 		handlerListApplications,
@@ -32,9 +40,13 @@ const ApplicationHook = ({ token }) => {
 		handlerGetApplicationById } = ApplicationHandler({ token });
 
 	const searchListApplications = async () => {
-		const allApplications = await handlerListApplications();
+		const allApplications = await handlerListApplications({ page, size });
 		if(!_.isNil(allApplications)){
-			setApplications(allApplications);
+			setApplications(allApplications?.applications);
+			setCurrentPage(allApplications?.currentPage);
+			setTotalItems(allApplications?.totalItems);
+			setTotalPages(allApplications?.totalPages);
+			setRangePaginator(range(1, allApplications?.totalPages));
 			setLoading(false);
 			setIsLoadingApplications(false);
 		}
@@ -45,11 +57,12 @@ const ApplicationHook = ({ token }) => {
         searchListApplications();
 	},[]);
 
+
 	useEffect(() => {
 		if(isLoadingApplications){
 			searchListApplications();
 		}
-	},[isLoadingApplications]);
+	},[isLoadingApplications, page]);
 
 
 	const clearFields = () => {
@@ -135,7 +148,8 @@ const ApplicationHook = ({ token }) => {
 		isError, isWarning, isSuccess, messageError,
 		messageSuccess, showModal, titleModal, handlerCancelForm,
 		handlerSubmitForm, saving, handlerShowModal,
-		code, name, setCode, setName, handlerEditApplication
+		code, name, setCode, setName, handlerEditApplication, totalPages,
+		page, setPage, rangePaginator, setIsLoadingApplications, currentPage
 	}
 }
 

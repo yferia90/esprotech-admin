@@ -6,8 +6,8 @@ import {
     updateGroup
 } from '../api/Group.api';
 
-const handlerListGroup = async ({ token }) => {
-    const groups = await getGroups({ token });
+const handlerListGroup = async ({ token, page, size }) => {
+    const groups = await getGroups({ token, page, size });
     return groups?.groups;
 }
 
@@ -32,7 +32,7 @@ const handlerUpdateGroup = async ({ token, formData, id }) => {
 }
 
 const GroupHandler = ({ token }) => ({
-    handlerListGroup: () => handlerListGroup({ token }),
+    handlerListGroup: ({ page, size }) => handlerListGroup({ token, page, size }),
     handlerDeleteGroup: ({ id }) => handlerDeleteGroup({ token, id }),
     handlerPostGroup: ({ formData }) => handlerPostGroup({ token, formData }),
     handlerGetGroupById: ({ id }) => handlerGetGroupById({ token, id }),

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import _ from "lodash";
 
 import GroupHandler from '../handlers/Group.handler';
+import { range } from '../../../utils/utils';
 
 const GroupHook = ({ token }) => {
 	// Carga inicial de la pantalla
@@ -23,6 +24,13 @@ const GroupHook = ({ token }) => {
 	const [name, setName] = useState('');
 	const [isFormEdit, setIsFormEdit] = useState(false);
 	const [idEdit, setIdEdit] = useState(null);
+	// Estados del paginado
+	const [page, setPage] = useState(0);
+	const [size, setSize] = useState(10);
+	const [currentPage, setCurrentPage] = useState(0);
+	const [totalItems, setTotalItems] = useState(0);
+	const [totalPages, setTotalPages] = useState(0);
+	const [rangePaginator, setRangePaginator] = useState([]);
 
 	const { 
 		handlerListGroup,
@@ -32,12 +40,16 @@ const GroupHook = ({ token }) => {
 		handlerGetGroupById } = GroupHandler({ token });
 
 	const searchListGroups = async () => {
-		const allGroups = await handlerListGroup();
+		const allGroups = await handlerListGroup({ page, size });
 		if(!_.isNil(allGroups)){
-			setGroups(allGroups);
-			setLoading(false);
+			setGroups(allGroups?.groups);
+			setCurrentPage(allGroups?.currentPage);
+			setTotalItems(allGroups?.totalItems);
+			setTotalPages(allGroups?.totalPages);
+			setRangePaginator(range(1, allGroups?.totalPages));			
 			setIsLoadingGroups(false);
 		}
+		setLoading(false);
 	}
 
 	useEffect(() => {
@@ -49,8 +61,7 @@ const GroupHook = ({ token }) => {
 		if(isLoadingGroups){
 			searchListGroups();
 		}
-	},[isLoadingGroups]);
-
+	},[isLoadingGroups, page]);
 
 	const clearFields = () => {
 		setCode('');
@@ -133,9 +144,10 @@ const GroupHook = ({ token }) => {
 	return {
 		groups, loading, deleteById,
 		isError, isWarning, isSuccess, messageError,
-		messageSuccess, showModal, titleModal, handlerCancelForm,
-		handlerSubmitForm, saving, handlerShowModal,
-		code, name, setCode, setName, handlerEdit
+		messageSuccess, showModal, titleModal, handlerCancelForm, 
+		handlerSubmitForm, saving, handlerShowModal, page, setPage, setIsLoadingGroups,
+		code, name, setCode, setName, handlerEdit, totalPages, rangePaginator,
+		currentPage
 	}
 }
 

@@ -7,6 +7,7 @@ const SidebarHook = () => {
     const [classUser, setClassUser] = useState(constants.BASE.USER.CLASSNAME.default);
     const [classApplication, setClassApplication] = useState(constants.BASE.APPLICATION.CLASSNAME.default);
     const [classGroup, setClassGroup] = useState(constants.BASE.GROUP.CLASSNAME.default);
+    const [classCurrency, setClassCurrency] = useState(constants.BASE.CURRENCY.CLASSNAME.default);
     // Módulo de Ventas
     const [classClient, setClassClient] = useState(constants.SALE.CLIENT.CLASSNAME.default);
     const [classOrderSale, setClassOrderSale] = useState(constants.SALE.ORDER_SALE.CLASSNAME.default);
@@ -31,7 +32,7 @@ const SidebarHook = () => {
         classSupplier, setClassSupplier,
         classOrderPurchase, setClassOrderPurchase,
         classApplication, setClassApplication,
-        classGroup, setClassGroup
+        classGroup, setClassGroup, classCurrency, setClassCurrency
     }
 }
 

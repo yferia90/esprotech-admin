@@ -12,7 +12,8 @@ import {
     RiHome2Line,
     RiCoinLine,
     RiLockLine,
-    RiEyeLine
+    RiEyeLine,
+    RiDeleteBin6Line
 } from "react-icons/ri";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
@@ -27,8 +28,9 @@ const Company = () => {
     const navigate = useNavigate();
     const { token } = useAppContext();
     const {
-        companies, loading,
-        setCompanies
+        companies, loading, setCompanies,
+        totalPages, page, setPage, rangePaginator,
+        setIsLoadingCompanies, currentPage
     } = CompanyHook({ token });
 
     const {
@@ -152,13 +154,12 @@ const Company = () => {
             </div>
             <div className="bg-secondary-100 p-8 rounded-xl">
                 { companies && companies.length > 0 && (
-                    <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
-                        <h5>Nro</h5>
+                    <div className="hidden md:grid grid-cols-1 md:grid-cols-5 gap-4 mb-10 p-4">
                         <h5>Código</h5>
                         <h5>Nombre</h5>
                         <h5>Estado</h5>
                         <h5>Email</h5>
-                        <h5>Acciones</h5>
+                        <h5 className="flex items-center justify-end">Acciones</h5>
                     </div>
                 )}                
                 {loading && (
@@ -168,77 +169,72 @@ const Company = () => {
                 )}
                 {
                     companies && companies.map((element, index) => (
-                        <div key={index} className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl">
+                        <div key={index} className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl">
                             <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">ID</h5>
-                                <span>{index}</span>
-                            </div>
-                            <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">CODIGO</h5>
                                 <span>{element.code}</span>
                             </div>
                             <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">Descripción</h5>
                                 <p>{element.name}</p>
                             </div>
                             <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">Estatus</h5>
                                 <span className="py-1 px-2 bg-green-500/10 text-green-500 rounded-lg">
                                     {element.active === true ? 'ACTIVA' : 'INACTIVA'}
                                 </span>
                             </div>
                             <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">Fecha</h5>
                                 {element.email}
                             </div>
-                            <div>
-                                <h5 className="md:hidden text-white font-bold mb-2">Acciones</h5>
-                                <Menu
-                                    menuButton={
-                                        <MenuButton className="flex items-center gap-x-2 bg-secondary-100 p-2 rounded-lg transition-colors">
-                                            Acciones
-                                        </MenuButton>
-                                    }
-                                    align="end"
-                                    arrow
-                                    arrowClassName="bg-secondary-100"
-                                    transition
-                                    menuClassName="bg-secondary-100 p-4"
-                                >
-                                    <MenuItem className="p-0 hover:bg-transparent">
-                                        <div
-                                            onClick={() => navigate(`/admin/config/company/detail/${element.id}`)}
-                                            className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
-                                        >
-                                            Ver detalles
-                                        </div>
-                                    </MenuItem>
-                                    <MenuItem className="p-0 hover:bg-transparent">
-                                        <div
-                                            onClick={() => handlerClickEditCompany({ id: element.id })}
-                                            className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1 cursor-pointer"
-                                        >
-                                            Editar
-                                        </div>
-                                    </MenuItem>
-                                </Menu>
-                            </div>
+                            <div className="flex items-center justify-end">
+                                <button 
+                                    className="border border-sky-700 p-2 rounded-lg">
+                                  <RiEyeLine className="text-sky-700" />
+                                </button>
+                                <button 
+                                    className="border border-red-500 p-2 rounded-lg ml-2">
+                                  <RiDeleteBin6Line className="text-red-500" />
+                                </button>
+                              </div>                            
                         </div>
                     ))
                 }
                 {
-                    companies && companies.length > 0 && (
+                    rangePaginator && rangePaginator.length > 0 && (
                         <div className="p-8 flex justify-center">
                             <nav className="flex items-center gap-2">
-                                <button className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
+                                <button 
+                                    onClick={() => {
+                                        if(currentPage > 0){
+                                            setPage(page - 1);
+                                            setIsLoadingCompanies(true);
+                                        }
+                                    }}
+                                    className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
                                     <RiArrowLeftSLine />
                                 </button>
-                                <div className="flex items-center">
-                                    <button className="py-2 px-4 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
-                                        1
-                                    </button>
-                                </div>
-                                <button className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
+                                {
+                                    rangePaginator.map((item, index) => (
+                                        <div key={index} className="flex items-center">                                        
+                                            <button 
+                                                onClick={() => {
+                                                    if(item - 1 !== page){
+                                                        setPage(item - 1);
+                                                        setIsLoadingCompanies(true);
+                                                    }
+                                                }}
+                                                className={`py-2 px-4 rounded-lg transition-colors hover:text-gray-100 ${item - 1 === page ? 'bg-secondary-900' : ''}`}>
+                                                {item}
+                                            </button>
+                                        </div>
+                                    ))                                    
+                                }
+                                <button 
+                                    onClick={() => {
+                                        if(currentPage < (totalPages - 1)){
+                                            setPage(page + 1);
+                                            setIsLoadingCompanies(true);
+                                        }
+                                    }}
+                                    className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
                                     <RiArrowRightSLine />
                                 </button>
                             </nav>

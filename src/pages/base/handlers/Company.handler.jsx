@@ -1,8 +1,8 @@
 import { getCompanies, getCompanyById, postCompany, putCompany } from '../api/Company.api';
 
-const handlerListCompanies = async ({ token }) => {
-    const companies = await getCompanies({ token });
-    return companies?.company;
+const handlerListCompanies = async ({ token, page, size }) => {
+    const companies = await getCompanies({ token, page, size });
+    return companies?.companies;
 }
 
 const handlerGetCompanyById = async ({ token, id }) => {
@@ -24,7 +24,7 @@ const handlerPutCompany = async ({ token, payload, id }) => {
 }
 
 const CompanyHandler = ({ token }) => ({
-    handlerListCompanies: () => handlerListCompanies({ token }),
+    handlerListCompanies: ({ page, size }) => handlerListCompanies({ token, page, size }),
     handlerGetCompanyById: ({ id }) => handlerGetCompanyById({ token, id}),
     handlerPostCompany: ({ payload }) => handlerPostCompany({ token, payload }),
     handlerPutCompany: ({ payload, id }) => handlerPutCompany({ token, payload, id }),

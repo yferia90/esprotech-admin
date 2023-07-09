@@ -5,24 +5,17 @@ import {
     listLocation
 } from '../../utils/Api';
 
-const getDataLocation = ({ municipalityId = null, setDataLocation, token }) => {
-    listLocation({ url: 'locality', token, id: municipalityId }).then((result) => {
-        const localities = result?.data?.data?.localities;
-        const status = result?.data?.status;
-        if (status === 200) {
-            setDataLocation(localities);
-        }
-    })
-}
+import { getData } from '../api/Select.api';
+import { getDataTypeSelect } from '../utils/Select.util';
 
-const getDataMunicipality = ({ stateId = null, setDataMunicipality, token }) => {
-    listMunicipality({ url: 'municipality', token, id: stateId }).then((result) => {
-        const municipalities = result?.data?.data?.municipalities;
-        const status = result?.data?.status;
-        if (status === 200) {
-            setDataMunicipality(municipalities);
-        }
-    })
+const getAllData = async ({ url, token }) => {
+    try{
+        let result = await getData({ url, token });
+        result = await getDataTypeSelect(url, result);
+        return result;
+    }catch(err){
+        console.log("ERROR",err);
+    }
 }
 
 const getDataState = ({ countryId = null, setDataStates, token }) => {
@@ -48,10 +41,9 @@ const getDataCountry = ({ setDataCountries, token }) => {
 
 const SelectHandler = ({ token }) => {
     return {
+        getAllData: ({ url }) => getAllData({ token, url }),
         getCountries: ({ setDataCountries }) => getDataCountry({ setDataCountries, token }),
         getStatesByCountry: ({ setDataStates, countryId }) => getDataState({ countryId, setDataStates, token }),
-        getMunicipalityByState: ({ setDataMunicipality, stateId }) => getDataMunicipality({ stateId, setDataMunicipality, token }),
-        getLocationByMunicipality: ({ setDataLocation, municipalityId }) => getDataLocation({ municipalityId, setDataLocation, token }),
     }
 }
 

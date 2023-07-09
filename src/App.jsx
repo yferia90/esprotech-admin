@@ -13,14 +13,15 @@ import Tickets from "./pages/admin/Tickets";
 import User from './pages/base/User';
 import Application from './pages/base/Application';
 import Group from './pages/base/Group';
+import Currency from './pages/base/Currency';
 import Customer from './pages/sale/Customer';
 import OrderSale from './pages/sale/OrderSale';
+import FormOrderSale from './pages/sale/FormOrderSale';
 import Category from './pages/stock/Category';
 import Product from './pages/stock/Product';
 import Store from './pages/stock/Store';
 import IncomingMove from './pages/stock/IncomingMove';
 import ExitMove from './pages/stock/ExitMove';
-import Supplier from './pages/purchase/Supplier';
 import OrderPurchase from './pages/purchase/OrderPurchase';
 
 const App = () => {
@@ -39,14 +40,16 @@ const App = () => {
           <Route path="config/user/edit/:id" element={<EditUser />} />
           <Route path="config/application" element={<Application />} />
           <Route path="config/group" element={<Group />} />
+          <Route path="config/currency" element={<Currency />} />
           <Route path="sale/customer" element={<Customer />} />
           <Route path="sale/sale" element={<OrderSale />} />
+          <Route path="sale/create" element={<FormOrderSale />} />
           <Route path="stock/category" element={<Category />} />
           <Route path="stock/product" element={<Product />} />
           <Route path="stock/store" element={<Store />} />
           <Route path="stock/incoming/move" element={<IncomingMove />} />
           <Route path="stock/exit/move" element={<ExitMove />} />
-          <Route path="purchase/supplier" element={<Supplier />} />
+          <Route path="purchase/supplier" element={<Customer />} />
           <Route path="purchase/purchase" element={<OrderPurchase />} />
           <Route path="tickets" element={<Tickets />} />          
         </Route>

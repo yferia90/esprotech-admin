@@ -31,6 +31,14 @@ export default {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
                 pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
             }
+        },
+        CURRENCY: {
+            NAME: 'Monedas',
+            PATH: '/admin/config/currency',
+            CLASSNAME: {
+                default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-gray-500 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
+                pointer: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:bg-primary before:border-secondary-100 hover:text-white transition-colors cursor-pointer'
+            }
         }
     },
     SALE: {
@@ -43,7 +51,7 @@ export default {
             }
         },
         ORDER_SALE: {
-            NAME: 'Ordenes de venta',
+            NAME: 'Ordenes',
             PATH: '/admin/sale/sale',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
@@ -61,7 +69,7 @@ export default {
             }
         },
         ORDER_PURCHASE: {
-            NAME: 'Ordenes de compra',
+            NAME: 'Ordenes',
             PATH: '/admin/purchase/purchase',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
@@ -95,7 +103,7 @@ export default {
             }
         },
         INCOMING_MOVE: {
-            NAME: 'Movimiento de entrada',
+            NAME: 'Entradas',
             PATH: '/admin/stock/incoming/move',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',
@@ -103,7 +111,7 @@ export default {
             }
         },
         EXIT_MOVE: {
-            NAME: 'Movimiento de salida',
+            NAME: 'Salidas',
             PATH: '/admin/stock/exit/move',
             CLASSNAME: {
                 default: 'py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors cursor-pointer',

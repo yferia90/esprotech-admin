@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
+  RiDashboard2Line,
   RiBarChart2Line,
   RiEarthLine,
   RiCustomerService2Line,
@@ -34,7 +35,7 @@ const Sidebar = () => {
     classSupplier, setClassSupplier,
     classOrderPurchase, setClassOrderPurchase,
     classApplication, setClassApplication,
-    classGroup, setClassGroup
+    classGroup, setClassGroup, classCurrency, setClassCurrency
   } = SidebarHook();
 
   return (
@@ -53,7 +54,7 @@ const Sidebar = () => {
                 to="/admin"
                 className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
               >
-                <RiBarChart2Line className="text-primary" /> Dashboard
+                <RiDashboard2Line className="text-primary" /> Dashboard
               </Link>
             </li>
             <li>
@@ -227,7 +228,7 @@ const Sidebar = () => {
                 />
               </button>
               <ul
-                className={` ${showMenuConfig ? "h-[158px]" : "h-0"
+                className={` ${showMenuConfig ? "h-[200px]" : "h-0"
                   } overflow-y-hidden transition-all`}
               >
                 <li>
@@ -272,6 +273,17 @@ const Sidebar = () => {
                     className={classGroup}
                   >
                     {constants.BASE.GROUP.NAME}
+                  </div>
+                </li>
+                <li>
+                  <div
+                    onClick={() => {
+                      setClassCurrency(constants.BASE.CURRENCY.CLASSNAME.pointer);
+                      navigate(`${constants.BASE.CURRENCY.PATH}`);
+                    }}
+                    className={classCurrency}
+                  >
+                    {constants.BASE.CURRENCY.NAME}
                   </div>
                 </li>
               </ul>

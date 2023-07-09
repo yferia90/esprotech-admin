@@ -1,19 +1,14 @@
 import React, { useEffect } from "react";
 import { Tab } from "@headlessui/react";
 import {
-  RiArrowRightSLine,
-  RiArrowLeftSLine,
   RiEdit2Line,
   RiEyeOffLine,
   RiMailLine,
   RiLockLine,
   RiEyeLine,
-  RiFilter2Fill,
   RiHome2Line,
   RiCodeLine,
-  RiCoinLine,
-  RiFileList2Line,
-  RiSdCardLine
+  RiCoinLine
 } from "react-icons/ri";
 import Select from '../../components/Select';
 import UseDataUser from '../auth/hooks/useDataUser';

@@ -13,8 +13,8 @@ const getUrl = ({ avatar }) => {
     return url;
 }
 
-const handlerListCustomers = async ({ token }) => {
-    const customers = await getCustomers({ token });
+const handlerListCustomers = async ({ token, customer, page, size }) => {
+    const customers = await getCustomers({ token, customer, page, size });
     return customers?.customers;
 }
 
@@ -61,7 +61,7 @@ const handlerUpdateCustomer = async ({ token, formData, id }) => {
 
 const CustomerHandler = ({ token }) => ({
     getUrl: ({ avatar }) => getUrl({ avatar }),
-    handlerListCustomers: () => handlerListCustomers({ token }),
+    handlerListCustomers: ({ customer, page, size }) => handlerListCustomers({ token, customer, page, size }),
     uploadAvatarCustomer: ({ formData }) => uploadAvatarCustomer({ token, formData }),
     handlerSubmitCustomer: ({ formData }) => handlerSubmitCustomer({ token, formData }),
     handlerDeleteCustomer: ({ id }) => handlerDeleteCustomer({ token, id }),

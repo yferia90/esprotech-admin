@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Env from '../../../../env';
 
-const getGroups = async ({ token }) => {
-    const result = await axios.get(`${Env.REACT_APP_BACKEND}/group`, {
+const getGroups = async ({ token, page, size }) => {
+    const result = await axios.get(`${Env.REACT_APP_BACKEND}/group?page=${page}&&size=${size}`, {
         headers: {
             Authorization: token
         }

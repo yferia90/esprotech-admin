@@ -11,13 +11,13 @@ const getUrl = ({ avatar }) => {
     return url;
 }
 
-const handlerListUsers = async ({ token }) => {
-    const users = await getUsers({ token });
-    const listUsers = users?.users;
-    let _listUsers = [];
-    if(!_.isNil(listUsers)){
-        listUsers.forEach(element => {
-            const companies = element.companies.reduce((companies,company) =>  `${companies}, ${company?.name}`,"");
+const handlerListUsers = async ({ token, page, size }) => {
+    let records = await getUsers({ token, page, size });    
+    const _records = records?.users?.users;
+    let allUsers = [];
+    if(!_.isNil(_records)){
+        _records.forEach(element => {
+            const companies = element.companies.reduce((companies,company) =>  `${companies !== "" ? companies +","+ company?.name : company?.name} `,"");
             const user = {
                 id: element.id,
                 fullName: `${element.firstName} ${element.lastName}`,
@@ -29,10 +29,13 @@ const handlerListUsers = async ({ token }) => {
                 mobile: element?.mobile,
                 avatar: getUrl({ avatar: element?.avatar })
             }
-            _listUsers.push(user);
+            allUsers.push(user);
         });
     }
-    return _listUsers;
+    return {
+        ...records?.users,
+        users: allUsers
+    };
 }
 
 const handlerGetUserById = async ({ token, id }) => {
@@ -46,7 +49,7 @@ const uploadAvatarUser = async ({ token, formData }) => {
 }
 
 const UserHandler = ({ token }) => ({
-    handlerListUsers: () => handlerListUsers({ token }),
+    handlerListUsers: ({ page, size }) => handlerListUsers({ token, page, size }),
     handlerGetUserById: ({ id }) => handlerGetUserById({ token, id}),
     uploadAvatarUser: ({ formData }) => uploadAvatarUser({ token, formData})
 });

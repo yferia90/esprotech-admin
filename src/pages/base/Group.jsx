@@ -24,7 +24,8 @@ const Group = () => {
 		deleteById, showModal, titleModal, 
 		handlerCancelForm, handlerSubmitForm, saving,
 		handlerShowModal, code, name, setCode, setName,
-        handlerEdit
+        handlerEdit, page, rangePaginator, setPage,
+        setIsLoadingGroups, totalPages, currentPage
     } = GroupHook({ token });
 
     const formGroup = () => {
@@ -69,8 +70,7 @@ const Group = () => {
     const ListView = () => {
         return (
             <>
-                <div className="hidden md:grid grid-cols-1 md:grid-cols-4 gap-4 mb-10 p-4">
-                    <h5>Número</h5>
+                <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-4 mb-10 p-4">
                     <h5>Código</h5>
                     <h5>Nombre</h5>
                     <h5>Aplicación</h5>
@@ -81,10 +81,7 @@ const Group = () => {
                     </div>
                 )}
                 {groups && groups.map((element, index) => (
-                    <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl">
-                        <div>
-                            <span>{index}</span>
-                        </div>
+                    <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl">
                         <div>
                             <span>{element.code}</span>
                         </div>
@@ -100,18 +97,43 @@ const Group = () => {
                     </div>
                 ))}
                 {
-                    groups && groups.length > 0 && (
+                    rangePaginator && rangePaginator.length > 0 && (
                         <div className="p-8 flex justify-center">
                             <nav className="flex items-center gap-2">
-                                <button className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
+                                <button 
+                                    onClick={() => {
+                                        if(currentPage > 0){
+                                            setPage(page - 1);
+                                            setIsLoadingGroups(true);
+                                        }
+                                    }}
+                                    className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
                                     <RiArrowLeftSLine />
                                 </button>
-                                <div className="flex items-center">
-                                    <button className="py-2 px-4 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
-                                        1
-                                    </button>
-                                </div>
-                                <button className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
+                                {
+                                    rangePaginator.map((item, index) => (
+                                        <div key={index} className="flex items-center">                                        
+                                            <button 
+                                                onClick={() => {
+                                                    if(item - 1 !== page){
+                                                        setPage(item - 1);
+                                                        setIsLoadingGroups(true);
+                                                    }
+                                                }}
+                                                className={`py-2 px-4 rounded-lg transition-colors hover:text-gray-100 ${item - 1 === page ? 'bg-secondary-900' : ''}`}>
+                                                {item}
+                                            </button>
+                                        </div>
+                                    ))                                    
+                                }
+                                <button 
+                                    onClick={() => {
+                                        if(currentPage < (totalPages - 1)){
+                                            setPage(page + 1);
+                                            setIsLoadingGroups(true);
+                                        }
+                                    }}
+                                    className="p-2 hover:bg-secondary-900 rounded-lg transition-colors hover:text-gray-100">
                                     <RiArrowRightSLine />
                                 </button>
                             </nav>

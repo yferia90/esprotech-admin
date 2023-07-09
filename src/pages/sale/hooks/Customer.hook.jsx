@@ -1,8 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import _ from 'lodash';
+
+import { range } from '../../../utils/utils';
 import CustomerHandler from '../handlers/Customer.handler';
+import CustomerConstant from '../constants/Customer.constant';
 
 const CustomerHook = ({ token, companyId }) => {
+    const location = useLocation();
     const [loading, setLoading] = useState(true);
     const [customers, setCustomers] = useState([]);
     const [mode, setMode] = useState('list');
@@ -13,7 +18,7 @@ const CustomerHook = ({ token, companyId }) => {
     const [mobile, setMobile] = useState('');
     const [avatar, setAvatar] = useState('');
     const [filePreview, setFilePreview] = useState(null);
-    const [isClient] = useState(true);
+    const [isClient, setIsClient] = useState(true);
     // Estados del formulario de la modal
     const [errorUploadFile, setErrorUploadFile] = useState(false);    
     const [editCustomer, setIdEditCustomer] = useState('');
@@ -28,6 +33,13 @@ const CustomerHook = ({ token, companyId }) => {
     const [isCreateForm, setIsCreateForm] = useState(true);
     const [messageSuccess, setMessageSuccess] = useState('');
     const [isUpdateCustomers, setIsUpdateCustomers] = useState(false);
+    // Estados del paginado
+    const [page, setPage] = useState(0);
+    const [size, setSize] = useState(10);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalItems, setTotalItems] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [rangePaginator, setRangePaginator] = useState([]);
 
     const { 
         getUrl,
@@ -39,28 +51,43 @@ const CustomerHook = ({ token, companyId }) => {
         handlerUpdateCustomer,
     } = CustomerHandler({ token });
 
+    const isClientPath = () => {
+        const client = CustomerConstant.BASE_PATH[location.pathname];
+        return client;
+    }
+
     const searchListCustomer = async () => {
-        const customers = await handlerListCustomers();
-        const allCustomers = customers.map(item => {
-            if(item?.avatar) {
-                const customer = {...item, avatar: getUrl({ avatar: item?.avatar })};
-                return customer;
-            }
-            return item;
-        })
-        setCustomers(allCustomers);
+        const allCustomers = await handlerListCustomers({ customer: isClientPath(), page, size });
+        if(!_.isNil(allCustomers)){
+            const newCustomers = allCustomers?.customers.map(item => {
+                if(item?.avatar) {
+                    const customer = {...item, avatar: getUrl({ avatar: item?.avatar })};
+                    return customer;
+                }
+                return item;
+            })
+            setCustomers(newCustomers);
+            setCurrentPage(allCustomers?.currentPage);
+            setTotalItems(allCustomers?.totalItems);
+            setTotalPages(allCustomers?.totalPages);
+            setRangePaginator(range(1, allCustomers?.totalPages));
+        }
         setIsUpdateCustomers(false);
         setLoading(false);
     }
 
     useEffect(() => {
-        document.title = 'Listado de clientes';
-        searchListCustomer();
-    }, []);
+        document.title = (isClientPath() 
+            ? CustomerConstant.CUSTOMER.TITLE 
+            : CustomerConstant.SUPPLIER.TITLE);
+        setIsClient(isClientPath());
+        setPage(0);
+        setIsUpdateCustomers(true);
+    }, [location]);
 
     useEffect(() => {
         if(isUpdateCustomers) searchListCustomer();
-    }, [isUpdateCustomers]);
+    }, [isUpdateCustomers, page]);
 
 
     const clearFields = () => {
@@ -97,11 +124,11 @@ const CustomerHook = ({ token, companyId }) => {
         const result = await handlerDeleteCustomer({ id });
         if(result){
             // Se notifica al cliente que el registro fue eliminado
-            setMessageSuccess("El cliente fue eliminado satisfactoriamente");
+            setMessageSuccess(`El ${isClient ? 'cliente' : 'proveedor'} fue eliminado satisfactoriamente`);
             setIsUpdateCustomers(true);
             handlerMessageSuccess();
         }else{
-            setMessageError("Ups, ocurrió un error eliminando el cliente");
+            setMessageError(`Ups, ocurrió un error eliminando el ${isClient ? 'cliente' : 'proveedor'}`);
             handlerMessageError();
         }        
     }
@@ -109,7 +136,7 @@ const CustomerHook = ({ token, companyId }) => {
     const getDataCustomer = async ({ id }) => {
         const customer = await handlerGetCustomerById({ id });
         if (_.isUndefined(customer) || _.isEmpty(customer)) {
-            setMessageError("Ups, ocurrió un error, intente más tarde editar el cliente");
+            setMessageError("Ups, ocurrió un error, intente más tarde");
             handlerMessageError();
         } else {
             setFirstName(customer?.firstName || '');
@@ -126,7 +153,7 @@ const CustomerHook = ({ token, companyId }) => {
     }
 
     const handlerEdit = async ({ id }) => {
-        setTitleForm('Editar cliente');
+        setTitleForm(`Editar ${isClient ? 'cliente' : 'proveedor'}`);
         setShowModal(true);
         setIsCreateForm(false);
         getDataCustomer({ id });
@@ -146,7 +173,7 @@ const CustomerHook = ({ token, companyId }) => {
         setShowModal(false);
         if(!_.isNil(customer)){
             // Notificación al cliente de la operación success
-            setMessageSuccess(`El cliente fue ${isCreateForm ? 'guardado' : 'actualizado'} satisfactoriamente`);
+            setMessageSuccess(`El ${isClient ? 'cliente' : 'proveedor'} fue ${isCreateForm ? 'guardado' : 'actualizado'} satisfactoriamente`);
             handlerMessageSuccess();
             setIsUpdateCustomers(true);
         }else {
@@ -172,7 +199,7 @@ const CustomerHook = ({ token, companyId }) => {
     }
 
     const handlerClickShowModal = ({ addDetail = false }) => {
-        setTitleForm('Nuevo cliente');
+        setTitleForm(`Nuevo ${isClient ? 'cliente' : 'proveedor'}`);
         setIsCreateForm(true);        
         setShowModal(true);
     }
@@ -180,11 +207,12 @@ const CustomerHook = ({ token, companyId }) => {
     return {
         filePreview, setFilePreview, errorUploadFile, firstName, setFirstName,
         lastName, setLastName, email, setEmail, mobile, setMobile,
-        avatar, setAvatar, titleForm, showModal, saving,
+        avatar, setAvatar, titleForm, showModal, saving, setIsUpdateCustomers,
         handlerCancelForm, handlerSubmitForm, handlerClickShowModal,
         errorSubmit, warningForm, addForm, handlerFileChange, messageSuccess,
         messageError, handlerDelete, customers, loading, setCustomers,
-        mode, setMode, handlerEdit
+        mode, setMode, handlerEdit, isClient, totalPages, rangePaginator,
+        currentPage, page, setPage
     }
 }
 

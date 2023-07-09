@@ -1,8 +1,8 @@
 import axios from 'axios';
 import Env from '../../../../env';
 
-const getCustomers = async ({ token }) => {
-    const result = await axios.get(`${Env.REACT_APP_BACKEND}/customer`, {
+const getCustomers = async ({ token, customer, page, size }) => {
+    const result = await axios.get(`${Env.REACT_APP_BACKEND}/customer?page=${page}&&size=${size}&&customer=${customer}`, {
         headers: {
             Authorization: token
         }

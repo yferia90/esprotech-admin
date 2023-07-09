@@ -6,8 +6,8 @@ import {
     getApplication
 } from '../api/Application.api';
 
-const handlerListApplications = async ({ token }) => {
-    const applications = await getApplications({ token });
+const handlerListApplications = async ({ token, page, size }) => {
+    const applications = await getApplications({ token, page, size });
     return applications?.applications;
 }
 
@@ -32,7 +32,7 @@ const handlerUpdateApplication = async ({ token, formData, id }) => {
 }
 
 const ApplicationHandler = ({ token }) => ({
-    handlerListApplications: () => handlerListApplications({ token }),
+    handlerListApplications: ({ page, size }) => handlerListApplications({ token, page, size }),
     handlerDeleteApplication: ({ id }) => handlerDeleteApplication({ token, id }),
     handlerPostApplication: ({ formData }) => handlerPostApplication({ token, formData }),
     handlerGetApplicationById: ({ id }) => handlerGetApplicationById({ token, id }),
